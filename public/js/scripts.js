@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', event => {
+window.addEventListener('DOMContentLoaded', event => { // <-- FIXED "ndow" to "window"
 
     // Navbar shrink function
     var navbarShrink = function () {
@@ -11,10 +11,9 @@ window.addEventListener('DOMContentLoaded', event => {
         } else {
             navbarCollapsible.classList.add('navbar-shrink')
         }
-
     };
 
-    // Shrink the navbar 
+    // Shrink the navbar
     navbarShrink();
 
     // Shrink the navbar when page is scrolled
@@ -42,64 +41,11 @@ window.addEventListener('DOMContentLoaded', event => {
         });
     });
 
-    function generatePhotoSwipeGallery(galleryData, galleryContainerId) {
-        const pswpGalleryEl = document.querySelector(`#${galleryContainerId}`);
-
-        // Create an array to store the photoswipe items
-        const items = [];
-
-        // Iterate over the gallery data and create photoswipe items
-        galleryData.forEach((data) => {
-            const item = {
-                gallery_id: data.gallery_id,
-                src: data.src,
-                w: data.width,
-                h: data.height,
-                title: data.title,
-                description: data.description,
-            };
-
-            items.push(item);
-
-            // Create an anchor element for each image
-            const anchorEl = document.createElement('a');
-            anchorEl.setAttribute('data-id', data.id);
-            anchorEl.setAttribute('href', 'assets/galleries/' + data.gallery_id + '/' + data.src);
-            anchorEl.setAttribute('target', '_blank');
-
-            // Create an image element for the thumbnail
-            const imgEl = document.createElement('img');
-            imgEl.setAttribute('class', 'img-thumbnail img-fluid mb-3 mb-lg-0');
-            imgEl.setAttribute('src', data.src);
-            imgEl.setAttribute('alt', '...');
-
-            // Append the image element to the anchor element
-            anchorEl.appendChild(imgEl);
-
-            // Append the anchor element to the gallery container
-            pswpGalleryEl.appendChild(anchorEl);
-        });
-
-        // Initialize the PhotoSwipe gallery
-        const lightbox = new PhotoSwipe(pswpGalleryEl, PhotoSwipeUI_Default, items, {
-            // Add any additional options or callbacks as needed
-        });
-
-        // Open the gallery when a thumbnail is clicked
-        pswpGalleryEl.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = e.target.closest('a');
-            if (target) {
-                const id = parseInt(target.getAttribute('data-id'), 10);
-                lightbox.goTo(id - 1);
-                lightbox.init();
-            }
-        });
-    }
+    // --- DELETED ALL PHOTOSWIPE CODE ---
+    // We are using VenoBox, which is initialized in venebox-utils.js
 
     // Get the current year
     // Set the current year in the copyright text
     document.getElementById("copyright-year").textContent = new Date().getFullYear();
-
 
 });

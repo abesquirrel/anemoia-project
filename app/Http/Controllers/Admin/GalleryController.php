@@ -108,4 +108,42 @@
             $gallery->delete();
             return redirect()->route('admin.galleries.index')->with('success', 'Gallery deleted successfully.');
         }
+
+        /**
+         * Mark a gallery as "featured".
+         * Enforces the 2-album limit by replacing the oldest.
+         */
+        public function feature(Gallery $gallery)
+        {
+            // 1. Count how many are already featured
+            $featuredCount = Gallery::whereNotNull('featured_at')->count();
+
+            // 2. If we are at the limit (2), un-feature the oldest one
+            if ($featuredCount >= 2) {
+                $oldestFeatured = Gallery::whereNotNull('featured_at')
+                    ->orderBy('featured_at', 'asc')
+                    ->first();
+                if ($oldestFeatured) {
+                    $oldestFeatured->featured_at = null;
+                    $oldestFeatured->save();
+                }
+            }
+
+            // 3. Feature the new one by setting the timestamp to now
+            $gallery->featured_at = now();
+            $gallery->save();
+
+            return back()->with('success', 'Gallery featured.');
+        }
+
+        /**
+         * Remove a gallery from "featured".
+         */
+        public function unfeature(Gallery $gallery)
+        {
+            $gallery->featured_at = null;
+            $gallery->save();
+
+            return back()->with('success', 'Gallery un-featured.');
+        }
     }

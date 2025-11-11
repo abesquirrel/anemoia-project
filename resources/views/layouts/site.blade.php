@@ -4,9 +4,12 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <title>Anem[o]ia</title>
+
         <link rel="icon" type="image/x-icon" href="{{ asset('assets/favicon.ico') }}" />
 
         <link href="{{ asset('vendor/venebox/venebox.css') }}" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
     </head>
@@ -22,15 +25,18 @@
         <script src="{{ asset('vendor/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('vendor/js/font_awesome_all.js') }}" crossorigin="anonymous"></script>
         <script src="{{ asset('js/scripts.js') }}"></script>
+
         <script src="{{ asset('vendor/venebox/venebox.js') }}"></script>
         <script src="{{ asset('js/venebox-utils.js') }}"></script>
 
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-6JPNPWF3ZJ"></script>
+        <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-6JPNPWF3ZJ');
+            // Initialize GLightbox
+            const lightbox = GLightbox({
+                selector: '.g-lightbox', // We will use this class
+                loop: true,
+                touchNavigation: true
+            });
         </script>
     </body>
 </html>

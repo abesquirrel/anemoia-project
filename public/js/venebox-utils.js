@@ -1,5 +1,5 @@
 new VenoBox({
-    selector: '.venobox',
+    selector: '.venebox',
     numeration: true,
     infinigall: true,
     share: true,

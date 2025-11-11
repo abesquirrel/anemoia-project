@@ -15,6 +15,7 @@ class Photo extends Model
     protected $fillable = [
         'gallery_id',
         'filename',
+        'hash',
         'exif_metadata',
         'is_cover_photo',
         'is_visible'
@@ -23,8 +24,6 @@ class Photo extends Model
     /*
      * A Photo belongs to a Gallery
      */
-    private mixed $filename;
-
     public function gallery()
     {
         return $this->belongsTo(Gallery::class);

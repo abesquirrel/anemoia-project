@@ -30,16 +30,15 @@ Route::middleware('auth')->group(function () {
     // Routes in *this* group require the user to be logged in AND be an admin.
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
-        //Gallery Management (Full CRUD)
         Route::resource('galleries', AdminGalleryController::class);
 
-        //Photo Management (Nested under Galleries)
-        Route::get('galleries/{gallery}/photos', [AdminPhotoController::class, 'index'])->name('photos.index'); // <-- CORRECTED
+        Route::get('galleries/{gallery}/photos', [AdminPhotoController::class, 'index'])->name('photos.index');
         Route::post('galleries/{gallery}/photos', [AdminPhotoController::class, 'store'])->name('photos.store');
         Route::delete('photos/{photo}', [AdminPhotoController::class, 'destroy'])->name('photos.destroy');
 
-        //Future Blog routes will go here
-        // Route::resource('posts', AdminPostController::class);
+        Route::patch('photos/{photo}/set-cover', [AdminPhotoController::class, 'setCover'])->name('photos.setCover');
+        Route::patch('galleries/{gallery}/feature', [AdminGalleryController::class, 'feature'])->name('galleries.feature');
+        Route::patch('galleries/{gallery}/unfeature', [AdminGalleryController::class, 'unfeature'])->name('galleries.unfeature');
 
     });
 });

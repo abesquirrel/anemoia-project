@@ -15,22 +15,33 @@
          */
         public function home()
         {
-            // CHANGED: Use find() instead of findOrFail().
-            // This will return 'null' if the gallery isn't found, instead of a 404 error.
-            $featured_gallery_1 = Gallery::with('photos')->find(3);
-            $featured_gallery_2 = Gallery::with('photos')->find(4);
+            // 1. Get the 2 most recently featured galleries
+            $featured_galleries = Gallery::with('photos')
+                ->whereNotNull('featured_at')
+                ->orderBy('featured_at', 'desc')
+                ->take(2)
+                ->get();
 
-            // This query is fine and will just return an empty list
+            // 2. Assign them to variables. get(0) and get(1) will return null if not found.
+            $featured_gallery_a = $featured_galleries->get(0);
+            $featured_gallery_b = $featured_galleries->get(1);
+
+            // 3. Get the IDs of the featured galleries so we can exclude them from the main grid
+            $featured_ids = $featured_galleries->pluck('id');
+
+            // 4. Get all other galleries
             $grid_galleries = Gallery::with('photos')
                 ->where('is_visible', true)
-                ->whereNotIn('id', [3, 4])
+                ->whereNotIn('id', $featured_ids) // Exclude featured ones
                 ->latest()
                 ->get();
 
-            // Send all this data to our main view
+            // 5. Send the data to the view.
+            // The view 'partials.gallery-section' already has @if($featured_gallery_a)
+            // so it will safely handle null values if fewer than 2 are featured.
             return view('welcome', [
-                'featured_gallery_1' => $featured_gallery_1,
-                'featured_gallery_2' => $featured_gallery_2,
+                'featured_gallery_a' => $featured_gallery_a,
+                'featured_gallery_b' => $featured_gallery_b,
                 'grid_galleries' => $grid_galleries,
             ]);
         }

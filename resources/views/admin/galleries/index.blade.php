@@ -38,9 +38,22 @@
                             </td>
                             <td>{{ $gallery->photos_count }}</td>
                             <td>{{ $gallery->created_at->format('Y-m-d') }}</td>
-                            <td>
+                            <td style="min-width: 300px;">
                                 <a href="{{ route('admin.photos.index', $gallery) }}" class="btn btn-info btn-sm">Photos</a>
                                 <a href="{{ route('admin.galleries.edit', $gallery) }}" class="btn btn-warning btn-sm">Edit</a>
+                                @if($gallery->featured_at)
+                                    <form action="{{ route('admin.galleries.unfeature', $gallery) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-secondary btn-sm">Unfeature</button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('admin.galleries.feature', $gallery) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-primary btn-sm">Feature</button>
+                                    </form>
+                                @endif
                                 <form action="{{ route('admin.galleries.destroy', $gallery) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                     @csrf
                                     @method('DELETE')

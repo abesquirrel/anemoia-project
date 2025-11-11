@@ -1,7 +1,6 @@
 <section class="projects-section bg-light" id="gallery">
     <div class="container px-4 px-lg-5">
 
-        <!-- Featured Photo Row (from gallery.php) -->
         <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
             <div class="col-xl-8 col-lg-7"><img class="img-fluid img-thumbnail mb-3 mb-lg-0" src="{{ asset('assets/img/bg-masthead.jpg') }}" alt="..." /></div>
             <div class="col-xl-4 col-lg-5">
@@ -11,75 +10,77 @@
                 </div>
             </div>
         </div>
-        <!-- Featured Photo Row End -->
-
-        <!-- Featured Gallery 1 (From Controller $featured_gallery_1) -->
-        {{-- This @if check now prevents errors if the gallery is null --}}
-        @if($featured_gallery_1)
+        @if($featured_gallery_a)
+            @php $coverUrl_A = $featured_gallery_a->cover_photo_url; @endphp
             <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
                 <div class="col-lg-6">
-                    <a class="venobox" data-gall="gallery{{ $featured_gallery_1->id }}" href="{{ $featured_gallery_1->cover_photo_url }}">
-                        <img class="img-thumbnail img-fluid photo-container" src="{{ $featured_gallery_1->cover_photo_url }}" alt="{{ $featured_gallery_1->title }}">
+                    <a class="g-lightbox" data-gallery="gallery{{ $featured_gallery_a->id }}" href="{{ $coverUrl_A }}">
+                        <img class="img-thumbnail img-fluid photo-container" src="{{ $coverUrl_A }}" alt="{{ $featured_gallery_a->title }}">
                     </a>
-                    @foreach($featured_gallery_1->photos->skip(1) as $photo)
-                        <a class="venobox d-none" data-gall="gallery{{ $featured_gallery_1->id }}" href="{{ $photo->url }}"></a>
+
+                    @foreach($featured_gallery_a->photos as $photo)
+                        @if($photo->url !== $coverUrl_A)
+                            <a class="g-lightbox d-none" data-gallery="gallery{{ $featured_gallery_a->id }}" href="{{ $photo->url }}"></a>
+                        @endif
                     @endforeach
                 </div>
                 <div class="col-lg-6">
                     <div class="bg-black text-center h-100 project">
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-left">
-                                <h4 class="text-white">{{ $featured_gallery_1->title }}</h4>
-                                <p class="mb-0 text-white-50">{{ $featured_gallery_1->camera }}</p>
-                                <p class="mb-0 text-white-50">{{ $featured_gallery_1->film }}</p>
+                                <h4 class="text-white">{{ $featured_gallery_a->title }}</h4>
+                                <p class="mb-0 text-white-50">{{ $featured_gallery_a->camera }}</p>
+                                <p class="mb-0 text-white-50">{{ $featured_gallery_a->film }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         @endif
-        <!-- Featured Gallery 1 End -->
-
-        <!-- Featured Gallery 2 (From Controller $featured_gallery_2) -->
-        @if($featured_gallery_2)
+        @if($featured_gallery_b)
+            @php $coverUrl_B = $featured_gallery_b->cover_photo_url; @endphp
             <div class="row gx-0 justify-content-center">
                 <div class="col-lg-6">
-                    <a class="venobox" data-gall="gallery{{ $featured_gallery_2->id }}" href="{{ $featured_gallery_2->cover_photo_url }}">
-                        <img class="img-thumbnail img-fluid photo-container" src="{{ $featured_gallery_2->cover_photo_url }}" alt="{{ $featured_gallery_2->title }}">
+                    <a class="g-lightbox" data-gallery="gallery{{ $featured_gallery_b->id }}" href="{{ $coverUrl_B }}">
+                        <img class="img-thumbnail img-fluid photo-container" src="{{ $coverUrl_B }}" alt="{{ $featured_gallery_b->title }}">
                     </a>
-                    @foreach($featured_gallery_2->photos->skip(1) as $photo)
-                        <a class="venobox d-none" data-gall="gallery{{ $featured_gallery_2->id }}" href="{{ $photo->url }}"></a>
+
+                    @foreach($featured_gallery_b->photos as $photo)
+                        @if($photo->url !== $coverUrl_B)
+                            <a class="g-lightbox d-none" data-gallery="gallery{{ $featured_gallery_b->id }}" href="{{ $photo->url }}"></a>
+                        @endif
                     @endforeach
                 </div>
                 <div class="col-lg-6 order-lg-first">
                     <div class="bg-black text-center h-100 project">
                         <div class="d-flex h-100">
                             <div class="project-text w-100 my-auto text-center text-lg-right">
-                                <h4 class="text-white">{{ $featured_gallery_2->title }}</h4>
-                                <p class="mb-0 text-white-50">{{ $featured_gallery_2->camera }}</p>
-                                <p class="mb-0 text-white-50">{{ $featured_gallery_2->film }}</p>
+                                <h4 class="text-white">{{ $featured_gallery_b->title }}</h4>
+                                <p class="mb-0 text-white-50">{{ $featured_gallery_b->camera }}</p>
+                                <p class="mb-0 text-white-50">{{ $featured_gallery_b->film }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         @endif
-        <!-- Featured Gallery 2 End -->
-
-
-        <!-- Galleries Grid (from $grid_galleries) -->
         <div class="container px-4 px-lg-0 p-5">
             <h2 class="text-black-100 text-center mb-5">Fragments of reminiscence</h2>
             <div class="row">
-                {{-- @forelse handles the case where $grid_galleries is empty --}}
                 @forelse ($grid_galleries as $gallery)
                     <div class="col-md-4">
                         <div class="card mb-lg-2">
-                            <a class="venobox" data-gall="gallery_{{ $gallery->id }}" href="{{ $gallery->cover_photo_url }}">
-                                <img class="img-fluid img-thumbnail card-img-top photo-container" src="{{ $gallery->cover_photo_url }}" alt="{{ $gallery->title }}">
+                            @php $coverUrl_Grid = $gallery->cover_photo_url; @endphp
+
+                            <a class="g-lightbox" data-gallery="gallery_{{ $gallery->id }}" href="{{ $coverUrl_Grid }}">
+                                <img class="img-fluid img-thumbnail card-img-top photo-container" src="{{ $coverUrl_Grid }}" alt="{{ $gallery->title }}">
                             </a>
-                            @foreach($gallery->photos->skip(1) as $photo)
-                                <a class="venobox d-none" data-gall="gallery_{{ $gallery->id }}" href="{{ $photo->url }}"></a>
+
+                            @foreach($gallery->photos as $photo)
+                                @if($photo->url !== $coverUrl_Grid)
+                                    {{-- THIS IS THE FIX: 'classs' is now 'class' --}}
+                                    <a class="g-lightbox d-none" data-gallery="gallery_{{ $gallery->id }}" href="{{ $photo->url }}"></a>
+                                @endif
                             @endforeach
 
                             <div class="card-body bg-black">
@@ -95,7 +96,5 @@
                 @endforelse
             </div>
         </div>
-        <!-- Galleries Grid End -->
-
     </div>
 </section>

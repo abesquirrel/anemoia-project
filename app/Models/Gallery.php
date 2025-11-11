@@ -19,7 +19,13 @@ class Gallery extends Model
         'camera',
         'lens',
         'film',
-        'is_visible'
+        'is_visible',
+        'featured_at',
+    ];
+
+    // This tells Laravel to treat 'featured_at' as a date object
+    protected $casts = [
+        'featured_at' => 'datetime',
     ];
 
     /*
