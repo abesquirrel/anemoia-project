@@ -73,7 +73,7 @@
                             <i class="fas fa-envelope text-primary mb-2"></i>
                             <h4 class="text-uppercase m-0">Email</h4>
                             <hr class="my-4 mx-auto" />
-                            <div class="small text-black-50"><a href="#!">anemoia.postbox@gmail.com</a></div>
+                            <div class="small text-black-50"><a href="#!">anemoia@paulrojas.quest</a></div>
                         </div>
                     </div>
                 </div>

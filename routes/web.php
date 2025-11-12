@@ -2,14 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController; // Import admin
 use App\Http\Controllers\Admin\PhotoController as AdminPhotoController; // Import admin
+use App\Http\Controllers\Admin\PostController as AdminPostController; // Import admin
 
 
 // ### PUBLIC SITE ###
 // This is the route for your main homepage (replaces index.php)
 Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // ### ADMIN PANEL ###
 // All routes in this group require the user to be logged in
@@ -39,6 +43,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('photos/{photo}/set-cover', [AdminPhotoController::class, 'setCover'])->name('photos.setCover');
         Route::patch('galleries/{gallery}/feature', [AdminGalleryController::class, 'feature'])->name('galleries.feature');
         Route::patch('galleries/{gallery}/unfeature', [AdminGalleryController::class, 'unfeature'])->name('galleries.unfeature');
+
+        Route::resource('posts', AdminPostController::class);
 
     });
 });

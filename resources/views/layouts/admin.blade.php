@@ -88,6 +88,11 @@
                         <i class="fas fa-fw fa-images"></i>
                         <span>Galleries</span></a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.posts.index') }}">
+                        <i class="fas fa-fw fa-pen-square"></i>
+                        <span>Blog</span></a>
+                </li>
                 <hr class="sidebar-divider d-none d-md-block">
             </ul>
             <div id="content-wrapper" class="d-flex flex-column">
