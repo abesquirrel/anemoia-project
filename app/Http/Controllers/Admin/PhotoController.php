@@ -97,4 +97,16 @@ class PhotoController extends Controller
 
         return back()->with('success', 'Photo deleted successfully');
     }
+
+    /**
+     * Toggle the visibility of a photo.
+     */
+    public function toggleVisibility(Photo $photo)
+    {
+        $photo->is_visible = !$photo->is_visible;
+        $photo->save();
+
+        $status = $photo->is_visible ? 'visible' : 'hidden';
+        return back()->with('success', "Photo is now $status.");
+    }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Photos for: <span class="fw-light">{{ $gallery->title }}</span></h1>
+        <h1 class="h3 mb-0 text-gray-800">Manage Photos: <span class="fw-light">{{ $gallery->title }}</span></h1>
         <a href="{{ route('admin.galleries.index') }}" class="btn btn-secondary btn-sm">
             &larr; Back to Galleries
         </a>
@@ -45,36 +45,79 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Existing Photos ({{ $gallery->photos->count() }})</h6>
         </div>
+
         <div class="card-body">
-            <div class="row gx-3 gy-3">
+            <div class="row g-3">
                 @forelse ($gallery->photos as $photo)
-                    <div class="col-md-3">
-                        <div class="card h-100">
-                            <img src="{{ $photo->url }}" class="card-img-top" alt="Gallery Photo" style="height: 200px; object-fit: cover;">
+                    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
 
-                            @if($photo->is_cover_photo)
-                                <span class="badge bg-primary" style="position: absolute; top: 10px; left: 10px;">Cover Photo</span>
-                            @endif
+                        {{-- Card Container --}}
+                        <div class="card h-100 shadow-sm {{ !$photo->is_visible ? 'border-warning bg-light' : '' }}">
 
-                            <div class="card-body text-center d-flex justify-content-center align-items-center" style="gap: 10px;">
+                            {{-- Image Container --}}
+                            <div class="position-relative" style="aspect-ratio: 1/1; overflow: hidden;">
+                                <img src="{{ $photo->url }}"
+                                     class="card-img-top w-100 h-100"
+                                     style="object-fit: cover; {{ !$photo->is_visible ? 'opacity: 0.5; filter: grayscale(100%);' : '' }}"
+                                     alt="Photo">
+
+                                {{-- Cover Badge --}}
+                                @if($photo->is_cover_photo)
+                                    <div class="position-absolute top-0 start-0 p-1">
+                                        <span class="badge bg-warning text-dark border border-white shadow-sm">
+                                            <i class="fas fa-star"></i> Cover
+                                        </span>
+                                    </div>
+                                @endif
+
+                                {{-- Hidden Badge --}}
+                                @if(!$photo->is_visible)
+                                    <div class="position-absolute top-50 start-50 translate-middle">
+                                        <span class="badge bg-dark shadow"><i class="fas fa-eye-slash"></i> Hidden</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- Actions Toolbar --}}
+                            <div class="card-footer p-2 bg-white d-flex justify-content-between align-items-center">
+
+                                {{-- Make Cover --}}
                                 @if(!$photo->is_cover_photo)
                                     <form action="{{ route('admin.photos.setCover', $photo) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-secondary btn-sm">Make Cover</button>
+                                        @csrf @method('PATCH')
+                                        <button type="submit" class="btn btn-link btn-sm text-warning p-0" title="Set as Cover">
+                                            <i class="far fa-star fa-lg"></i>
+                                        </button>
                                     </form>
+                                @else
+                                    <button class="btn btn-link btn-sm text-warning p-0" disabled>
+                                        <i class="fas fa-star fa-lg"></i>
+                                    </button>
                                 @endif
-                                <form action="{{ route('admin.photos.destroy', $photo) }}" method="POST" onsubmit="return confirm('Are you sure?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+
+                                {{-- Toggle Visibility --}}
+                                <form action="{{ route('admin.photos.toggleVisibility', $photo) }}" method="POST">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" class="btn btn-link btn-sm {{ $photo->is_visible ? 'text-secondary' : 'text-dark' }} p-0" title="Toggle Visibility">
+                                        <i class="fas {{ $photo->is_visible ? 'fa-eye' : 'fa-eye-slash' }} fa-lg"></i>
+                                    </button>
                                 </form>
+
+                                {{-- Delete --}}
+                                <form action="{{ route('admin.photos.destroy', $photo) }}" method="POST" onsubmit="return confirm('Delete this photo?');">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-link btn-sm text-danger p-0" title="Delete">
+                                        <i class="fas fa-trash-alt fa-lg"></i>
+                                    </button>
+                                </form>
+
                             </div>
                         </div>
                     </div>
                 @empty
-                    <div class="col-12">
-                        <p class="text-muted text-center">No photos have been uploaded to this gallery yet.</p>
+                    <div class="col-12 text-center py-5 text-muted">
+                        <i class="fas fa-images fa-3x mb-3 text-gray-300"></i>
+                        <p>No photos uploaded yet.</p>
                     </div>
                 @endforelse
             </div>

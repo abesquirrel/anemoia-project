@@ -30,20 +30,30 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // ### ADMIN-ONLY ROUTES ###
-    // Routes in *this* group require the user to be logged in AND be an admin.
+    // File: routes/web.php
+
+// ... (Your public routes stay the same)
+
+// ### ADMIN-ONLY ROUTES ###
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
+        // 1. Gallery Management (CRUD)
         Route::resource('galleries', AdminGalleryController::class);
 
+        // 2. Gallery Feature/Unfeature Actions (Fixes your 500 Error)
+        Route::patch('galleries/{gallery}/feature', [AdminGalleryController::class, 'feature'])->name('galleries.feature');
+        Route::patch('galleries/{gallery}/unfeature', [AdminGalleryController::class, 'unfeature'])->name('galleries.unfeature');
+
+        // 3. Photo Management
         Route::get('galleries/{gallery}/photos', [AdminPhotoController::class, 'index'])->name('photos.index');
         Route::post('galleries/{gallery}/photos', [AdminPhotoController::class, 'store'])->name('photos.store');
         Route::delete('photos/{photo}', [AdminPhotoController::class, 'destroy'])->name('photos.destroy');
 
+        // 4. Photo Actions (Cover & Visibility)
         Route::patch('photos/{photo}/set-cover', [AdminPhotoController::class, 'setCover'])->name('photos.setCover');
-        Route::patch('galleries/{gallery}/feature', [AdminGalleryController::class, 'feature'])->name('galleries.feature');
-        Route::patch('galleries/{gallery}/unfeature', [AdminGalleryController::class, 'unfeature'])->name('galleries.unfeature');
+        Route::patch('photos/{photo}/toggle-visibility', [AdminPhotoController::class, 'toggleVisibility'])->name('photos.toggleVisibility');
 
+        // 5. Blog Management
         Route::resource('posts', AdminPostController::class);
 
     });

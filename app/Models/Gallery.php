@@ -44,18 +44,21 @@ class Gallery extends Model
     {
         return Attribute::make(
             get: function () {
-                // First, tries to find a photo marked as the cover
-                $cover = $this->photos()->where('is_cover_photo', true)->first();
+                // 1. Try to find a marked cover photo that is ALSO visible
+                $cover = $this->photos()
+                    ->where('is_cover_photo', true)
+                    ->where('is_visible', true) // <-- Added this check
+                    ->first();
 
-                // If no cover photo is found, returns the first photo
+                // 2. If none, get the first visible photo
                 if (!$cover) {
-                    $cover = $this->photos()->first();
+                    $cover = $this->photos()
+                        ->where('is_visible', true) // <-- Added this check
+                        ->first();
                 }
 
-                // If a cover photo is found, return its public URL.
-                // Otherwise, return a default placeholder image.
+                // 3. Return URL or Fallback
                 if ($cover) {
-                    // With Storage::url() we can get the public URL of a file
                     return Storage::url($cover->filename);
                 }
 
