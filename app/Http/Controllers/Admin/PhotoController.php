@@ -7,6 +7,8 @@ use App\Models\Photo;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 class PhotoController extends Controller
 {
@@ -21,45 +23,59 @@ class PhotoController extends Controller
     }
 
     /**
-     * Store new photos uploaded to a gallery.
+     * Store new photos with resizing and compression.
      */
     public function store(Request $request, Gallery $gallery)
     {
-        $validated = $request->validate([
+        $request->validate([
             'photos' => 'required|array',
-            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            // We allow large files (up to 20MB) because we resize them immediately
+            'photos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:20480',
             'exif_metadata' => 'nullable|string|max:255',
         ]);
 
-        $uploadedCount = 0;
-        $skippedCount = 0;
+        $count = 0;
+        $skipped = 0;
 
         foreach ($request->file('photos') as $file) {
-            // 1. Calculate the hash of the file's content
+
+            // 1. Calculate Hash (to prevent duplicates)
             $hash = md5_file($file->getRealPath());
 
-            // 2. Check if a photo with this hash already exists
-            $exists = Photo::where('hash', $hash)->exists();
-
-            if (!$exists) {
-                // 3. If it does NOT exist, store it
-                $path = $file->store('photos/gallery-' . $gallery->id, 'public');
-
-                $gallery->photos()->create([
-                    'filename' => $path,
-                    'hash' => $hash, // <-- Save the hash
-                    'exif_metadata' => $validated['exif_metadata'],
-                ]);
-                $uploadedCount++;
-            } else {
-                // 4. If it exists, skip it
-                $skippedCount++;
+            // Check if this exact photo already exists in the database
+            if (Photo::where('hash', $hash)->exists()) {
+                $skipped++;
+                continue;
             }
+
+            // 2. Generate Filename
+            $filename = Str::random(40) . '.jpg';
+            $path = 'photos/gallery-' . $gallery->id . '/' . $filename;
+
+            // 3. Optimize the Image (Resize & Compress)
+            // We read the file, scale it to max 1920px, and compress to 80% quality.
+            $image = Image::read($file)
+                ->scaleDown(width: 1920, height: 1920)
+                ->toJpeg(quality: 80);
+
+            // 4. Save to Storage
+            // We use (string) $image to get the file data stream.
+            Storage::disk('public')->put($path, (string) $image);
+
+            // 5. Create Database Record
+            $gallery->photos()->create([
+                'filename' => $path,
+                'hash' => $hash,
+                'exif_metadata' => $request->input('exif_metadata'),
+                'is_visible' => true,
+            ]);
+
+            $count++;
         }
 
-        $message = "{$uploadedCount} photos uploaded successfully.";
-        if ($skippedCount > 0) {
-            $message .= " {$skippedCount} duplicates were skipped.";
+        $message = "$count photos uploaded and optimized.";
+        if ($skipped > 0) {
+            $message .= " ($skipped duplicates skipped)";
         }
 
         return back()->with('success', $message);
