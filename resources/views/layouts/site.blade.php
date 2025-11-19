@@ -12,6 +12,15 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SVWCRBLWG4"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-SVWCRBLWG4');
+        </script>
     </head>
     <body id="page-top">
 
