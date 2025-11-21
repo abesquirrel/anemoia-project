@@ -5,7 +5,6 @@
 
     {{-- STYLES FOR VISUAL SELECTOR --}}
     <style>
-        /* Hover effect for grid items */
         .photo-select-card:hover {
             transform: scale(1.05);
             box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
@@ -35,12 +34,13 @@
                 @csrf
                 @method('PUT')
 
+                {{-- Title --}}
                 <div class="mb-3">
                     <label for="title" class="form-label font-weight-bold">Title</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $post->title) }}" required>
                 </div>
 
-                {{-- 1. GALLERY SELECTOR (Was missing) --}}
+                {{-- 1. GALLERY SELECTOR --}}
                 <div class="mb-3">
                     <label for="gallery_id" class="form-label font-weight-bold">Link a Gallery (Optional)</label>
                     <select class="form-control" id="gallery_id" name="gallery_id">
@@ -54,7 +54,7 @@
                     <small class="text-muted">Selecting a gallery enables the photo selector below.</small>
                 </div>
 
-                {{-- 2. VISUAL PHOTO SELECTOR (Moved INSIDE the form) --}}
+                {{-- 2. VISUAL PHOTO SELECTOR (Now INSIDE the form) --}}
                 <div class="mb-4 p-3 border rounded bg-light">
                     <label class="form-label font-weight-bold">Cover Photo (From Selected Album)</label>
 
@@ -91,11 +91,13 @@
                 </div>
                 {{-- END VISUAL SELECTOR --}}
 
+                {{-- Body --}}
                 <div class="mb-3">
                     <label for="body" class="form-label font-weight-bold">Body</label>
                     <textarea class="form-control" id="body" name="body" rows="10" required>{{ old('body', $post->body) }}</textarea>
                 </div>
 
+                {{-- Images & Dates --}}
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="featured_image" class="form-label font-weight-bold">Featured Image (Custom Upload)</label>
@@ -119,18 +121,16 @@
                         @endif
                         <small class="form-text text-muted">Overrides the selected Album Photo.</small>
                     </div>
+
                     <div class="col-md-6 mb-3">
                         <label for="published_at" class="form-label font-weight-bold">Publish Date</label>
-
                         <div class="input-group">
                             <input type="datetime-local" class="form-control" id="published_at" name="published_at"
                                    value="{{ old('published_at', $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '') }}">
-
                             <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('published_at').value = ''">
                                 Clear (Draft)
                             </button>
                         </div>
-
                         <div class="form-text text-muted mt-1">
                             <a href="#" class="text-decoration-none" onclick="setNow(event)">Click here to set to NOW (Publish Immediately)</a>
                         </div>
@@ -141,7 +141,6 @@
                 <button type="submit" class="btn btn-primary">Update Post</button>
             </form>
             {{-- FORM ENDS HERE --}}
-
         </div>
     </div>
 
@@ -223,7 +222,7 @@
                         openModalBtn.disabled = false;
                         galleryHint.textContent = `${data.length} photos available.`;
 
-                        // Show preview if ID is already set
+                        // If we have a saved ID, show preview
                         const savedId = hiddenInput.value;
                         if (savedId) {
                             const photo = data.find(p => p.id == savedId);
@@ -239,7 +238,6 @@
                     modalGrid.innerHTML = '<div class="col-12 text-center text-muted py-4">No photos in this gallery.</div>';
                     return;
                 }
-
                 currentGalleryPhotos.forEach(photo => {
                     const isSelected = (photo.id == hiddenInput.value);
                     const div = document.createElement('div');
@@ -252,8 +250,7 @@
                             <img src="${photo.url}" class="w-100 h-100 rounded" style="object-fit: cover;">
                             ${isSelected ? '<div class="position-absolute top-0 end-0 m-1 badge bg-primary"><i class="fas fa-check"></i></div>' : ''}
                         </div>
-                    </div>
-                `;
+                    </div>`;
                     modalGrid.appendChild(div);
                 });
             }
@@ -268,9 +265,8 @@
             // --- EVENTS ---
             gallerySelect.addEventListener('change', function() {
                 const galleryId = this.value;
-                hiddenInput.value = ''; // Reset photo when gallery changes
+                hiddenInput.value = '';
                 updateMainPreview(null);
-
                 if (galleryId) {
                     fetchPhotos(galleryId);
                 } else {
@@ -289,7 +285,7 @@
                 bsModal.show();
             });
 
-            // Initialize
+            // Initialize on Page Load
             if (gallerySelect.value) {
                 fetchPhotos(gallerySelect.value);
             }
