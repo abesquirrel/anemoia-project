@@ -56,6 +56,9 @@ Route::middleware('auth')->group(function () {
         // 5. Blog Management
         Route::resource('posts', AdminPostController::class);
 
+        // 6. Ajax Request for Gallery Photos
+        Route::get('galleries/{gallery}/get-photos', [AdminPostController::class, 'getGalleryPhotos'])->name('galleries.getPhotos');
+
     });
 });
 
