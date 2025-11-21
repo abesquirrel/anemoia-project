@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Gallery;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $galleries = \App\Models\Gallery::all(); // Fetch all galleries
+        return view('admin.posts.create', compact('galleries'));
     }
 
     /**
@@ -35,10 +37,12 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-           'title' => 'required|string|max:255',
-           'body' => 'required|string',
-           'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-           'published_at' => 'nullable|date',
+            'title' => 'required|string|max:255',
+            'gallery_id' => 'nullable|exists:galleries,id', // <-- Validation
+            'cover_photo_id' => $request->input('cover_photo_id'),
+            'body' => 'required|string',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'published_at' => 'nullable|date',
         ]);
 
         $path = null;
@@ -47,7 +51,9 @@ class PostController extends Controller
         }
 
         Post::create([
-            'user_id' => Auth::id(), // Assing the post to the currently authenticated user
+            'user_id' => Auth::id(),
+            'gallery_id' => $validated['gallery_id'] ?? null,
+            'cover_photo_id' => $request->input('cover_photo_id') ?: null,
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']),
             'body' => $validated['body'],
@@ -70,9 +76,10 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $galleries = Gallery::all();
+        return view('admin.posts.edit', compact('post','galleries'));
     }
 
     /**
@@ -82,14 +89,25 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'gallery_id' => 'nullable|exists:galleries,id',
+            'cover_photo_id' => 'nullable|exists:photos,id', // Validate the photo selection
             'body' => 'required|string',
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'published_at' => 'nullable|date',
         ]);
 
-        $path = $post->featured_image; // Keep old image by default
+        $path = $post->featured_image;
+
+        // 1. Check if "Remove" was clicked
+        if ($request->has('remove_featured_image')) {
+            if ($post->featured_image) {
+                Storage::disk('public')->delete($post->featured_image);
+            }
+            $path = null;
+        }
+
+        // 2. Check if a NEW file was uploaded (overrides everything)
         if ($request->hasFile('featured_image')) {
-            // Delete old image if a new one is uploaded
             if ($post->featured_image) {
                 Storage::disk('public')->delete($post->featured_image);
             }
@@ -97,11 +115,13 @@ class PostController extends Controller
         }
 
         $post->update([
-           'title' => $validated['title'],
-           'slug' => Str::slug($validated['title']),
-           'body' => $validated['body'],
-           'featured_image' => $path,
-           'published_at' => $validated['published_at'],
+            'title' => $validated['title'],
+            'slug' => Str::slug($validated['title']),
+            'gallery_id' => $validated['gallery_id'] ?? null,
+            'cover_photo_id' => $request->input('cover_photo_id') ?? null, // Ensure this is saved
+            'body' => $validated['body'],
+            'featured_image' => $path,
+            'published_at' => $validated['published_at'],
         ]);
 
         return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully.');
@@ -121,5 +141,27 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('success', 'Post deleted successfully.');
+    }
+
+    /**
+     * Retrieve a list of visible photos for the specified gallery.
+     *
+     * @param Gallery $gallery The gallery model instance.
+     * @return \Illuminate\Http\JsonResponse A JSON response containing the visible photos in the gallery.
+     */
+    public function getGalleryPhotos(Gallery $gallery)
+    {
+        // We map the results to send both ID and the Full URL
+        $photos = $gallery->photos()
+            ->where('is_visible', true)
+            ->get()
+            ->map(function($photo) {
+                return [
+                    'id' => $photo->id,
+                    'url' => $photo->url, // Uses the accessor we created earlier
+                ];
+            });
+
+        return response()->json($photos);
     }
 }

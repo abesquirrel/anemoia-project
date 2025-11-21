@@ -12,11 +12,16 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $posts = Post::where('published_at', '<=', now())
+        // FIXED: Added 'gallery' and 'coverPhoto' to the 'with()' array
+        $allPosts = Post::with(['user', 'gallery', 'coverPhoto'])
+            ->where('published_at', '<=', now())
             ->latest('published_at')
-            ->paginate(10); // Show 10 posts per page
+            ->get();
 
-        return view('blog.index', compact('posts'));
+        $heroPost = $allPosts->first();
+        $gridPosts = $allPosts->slice(1);
+
+        return view('blog.index', compact('heroPost', 'gridPosts'));
     }
 
     /**
@@ -24,10 +29,11 @@ class BlogController extends Controller
      */
     public function show($slug)
     {
-        // Find the post by its slug, but only if it's published
-        $post = Post::where('slug', $slug)
+        // FIXED: Added 'gallery' and 'coverPhoto' here just like in index()
+        $post = Post::with(['user', 'gallery', 'coverPhoto'])
+            ->where('slug', $slug)
             ->where('published_at', '<=', now())
-            ->firstOrFail(); // Show 404 if not found or not published
+            ->firstOrFail(); // This returns 404 if post not found or not published
 
         return view('blog.show', compact('post'));
     }
