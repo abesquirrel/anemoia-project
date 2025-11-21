@@ -54,7 +54,7 @@
                     <small class="text-muted">Selecting a gallery enables the photo selector below.</small>
                 </div>
 
-                {{-- 2. VISUAL PHOTO SELECTOR (Now INSIDE the form) --}}
+                {{-- 2. VISUAL PHOTO SELECTOR (NOW INSIDE THE FORM) --}}
                 <div class="mb-4 p-3 border rounded bg-light">
                     <label class="form-label font-weight-bold">Cover Photo (From Selected Album)</label>
 
@@ -195,7 +195,6 @@
 
             // --- FUNCTIONS ---
 
-            // 1. Update Main UI (Preview Box)
             function updateMainPreview(url) {
                 if (url) {
                     previewImg.src = url;
@@ -210,7 +209,6 @@
                 }
             }
 
-            // 2. Fetch Photos
             function fetchPhotos(galleryId) {
                 openModalBtn.disabled = true;
                 galleryHint.textContent = "Loading photos...";
@@ -231,7 +229,6 @@
                     });
             }
 
-            // 3. Render Grid
             function renderGrid() {
                 modalGrid.innerHTML = '';
                 if (currentGalleryPhotos.length === 0) {
@@ -255,14 +252,12 @@
                 });
             }
 
-            // 4. Global Selection Function
             window.selectPhoto = function(id, url) {
                 hiddenInput.value = id;
                 updateMainPreview(url);
                 bsModal.hide();
             };
 
-            // --- EVENTS ---
             gallerySelect.addEventListener('change', function() {
                 const galleryId = this.value;
                 hiddenInput.value = '';
