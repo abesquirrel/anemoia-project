@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <!DOCTYPE html>
+    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -70,81 +70,83 @@
         </style>
     </head>
     <body id="page-top">
-        <div id="wrapper">
-            <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}" target="_blank">
-                    <div class="sidebar-brand-text mx-3">Anem[o]ia</div>
-                </a>
-                <hr class="sidebar-divider my-0">
-                <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('dashboard') }}">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span></a>
-                </li>
-                <hr class="sidebar-divider">
-                <div class="sidebar-heading">Content</div>
-                <li class="nav-item {{ request()->routeIs('admin.galleries.*') || request()->routeIs('admin.photos.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('admin.galleries.index') }}">
-                        <i class="fas fa-fw fa-images"></i>
-                        <span>Galleries</span></a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('admin.posts.index') }}">
-                        <i class="fas fa-fw fa-pen-square"></i>
-                        <span>Blog</span></a>
-                </li>
-                <hr class="sidebar-divider d-none d-md-block">
-            </ul>
-            <div id="content-wrapper" class="d-flex flex-column">
-                <div id="content">
-                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
+    <div id="wrapper">
+        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}" target="_blank">
+                <div class="sidebar-brand-text mx-3">Anem[o]ia</div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('dashboard') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">Content</div>
+            <li class="nav-item {{ request()->routeIs('admin.galleries.*') || request()->routeIs('admin.photos.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.galleries.index') }}">
+                    <i class="fas fa-fw fa-images"></i>
+                    <span>Galleries</span></a>
+            </li>
+            <li class="nav-item {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.posts.index') }}">
+                    <i class="fas fa-fw fa-pen-square"></i>
+                    <span>Blog</span></a>
+            </li>
+            <hr class="sidebar-divider d-none d-md-block">
+        </ul>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
                                 <span class="nav-link text-gray-600 small">
                                     {{ Auth::user()->name }}
                                 </span>
-                            </li>
-                            <div class="topbar-divider d-none d-sm-block"></div>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
-                                    <i class="fas fa-user fa-sm fa-fw me-1 text-gray-400"></i>
-                                    Profile
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw me-1 text-gray-400"></i>
-                                    Settings
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw me-1 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                            </li>
-                            <div class="topbar-divider d-none d-sm-block"></div>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw me-1 text-gray-400"></i>
-                                    Logout
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="container-fluid">
-                        @yield('content')
-                    </div>
+                        </li>
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('profile.edit') }}">
+                                <i class="fas fa-user fa-sm fa-fw me-3 text-gray-400"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-cogs fa-sm fa-fw me-3 text-gray-400"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-list fa-sm fa-fw me-3 text-gray-400"></i>
+                                Activity Log
+                            </a>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw me-3 text-gray-400"></i>
+                                Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="container-fluid">
+                    @yield('content')
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="{{ asset('admin_assets/vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('admin_assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('admin_assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-        <script src="{{ asset('admin_assets/js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/sb-admin-2.min.js') }}"></script>
     </body>
-</html>
+    </html>
