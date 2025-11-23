@@ -1,4 +1,3 @@
-{{-- File: resources/views/blog/index.blade.php --}}
 @extends('layouts.site')
 
 @section('content')
@@ -83,8 +82,8 @@
         <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
             <div class="d-flex justify-content-center">
                 <div class="text-center">
-                    <h1 class="mx-auto my-0 text-uppercase">The Journal</h1>
-                    <h2 class="text-white-50 mx-auto mt-2 mb-5">Stories, moments, and memories.</h2>
+                    <h1 class="mx-auto my-0 text-uppercase">The Unreliable Narrator</h1>
+                    <h2 class="text-white-50 mx-auto mt-2 mb-5">What I know, what I thought, what I’m still figuring out.</h2>
                 </div>
             </div>
         </div>
