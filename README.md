@@ -1,59 +1,105 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌌 Anem[o]ia – Photography Portfolio & Journal
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel Version](https://img.shields.io/badge/Laravel-12-orange)](https://laravel.com/)
+[![PHP Version](https://img.shields.io/badge/PHP-8.3+-blue)](https://www.php.net/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple)](https://getbootstrap.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Issues](https://img.shields.io/github/issues/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/issues)
+[![Stars](https://img.shields.io/github/stars/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/stargazers)
+[![Forks](https://img.shields.io/github/forks/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/network)
+[![Last Commit](https://img.shields.io/github/last-commit/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/commits/main)
 
-## About Laravel
+Anem[o]ia is a **dynamic photography portfolio and journal** built with Laravel 12. Showcase your galleries, blog stories, and manage everything through a modern admin panel.  
+Featuring a **dark-themed responsive design**, integrated blog/gallery linking, and an intelligent storytelling experience.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ✨ Features
 
-## Learning Laravel
+### 🖼 Public Site
+- **Dynamic Galleries** – Responsive masonry grid + GLightbox.
+- **Journal / Blog** – Magazine-style posts with "Hero" images.
+- **Storytelling** – Link posts to galleries with featured gallery cards.
+- **Responsive Design** – Bootstrap 5 with custom "Grayscale" dark theme.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 🔧 Admin Panel
+- **Secure Dashboard** – Laravel Breeze + custom roles.
+- **Gallery Management** – Create/edit/delete albums, bulk uploads with auto-resize & compression.
+- **Photo Management**:
+    - Drag & drop multiple images (max 1920px, JPG, 80% compressed).
+    - Toggle visibility (drafts / hidden).
+    - Set any photo as album cover.
+- **Blog Management**:
+    - Visual Hero Image selector from galleries.
+    - Image priority: Custom Upload > Selected Photo > Album Cover.
+    - Draft & scheduled posts support.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🛠 Technology Stack
+- **Framework**: Laravel 12 (PHP 8.3+)
+- **Frontend**: Blade + Bootstrap 5 (SB Admin 2 for Admin, Grayscale for Public)
+- **Database**: MySQL / MariaDB
+- **Image Processing**: Intervention Image v3
+- **Server**: Optimized for cPanel / LiteSpeed
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
 
-## Contributing
+## 🚀 Installation & Setup
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Prerequisites
+- PHP ≥ 8.3, Composer, Node.js & NPM, MySQL
 
-## Code of Conduct
+### Local Development
+```bash
+git clone https://github.com/yourusername/anemoia-project.git
+cd anemoia-project
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+# update .env with DB credentials
+php artisan migrate
+npm run dev
+php artisan serve
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Production (cPanel / Shared Hosting)
+	1.	Build assets locally: npm run build
+	2.	Push & pull to server via Git
+	3.	Ensure document root → /public, PHP 8.3, fileinfo enabled
+	4.	SSH Deployment Commands:
 
-## Security Vulnerabilities
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan storage:link
+pkill -9 php # LiteSpeed restart
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+📂 Key Project Structure
+	•	app/Models – Gallery, Photo, Post
+	•	app/Http/Controllers/Admin – Admin logic
+	•	resources/views/layouts – site.blade.php, admin.blade.php
+	•	resources/views/blog – Journal views
+	•	routes/web.php – Public & Admin routes
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+👤 Default Admin User
+
+$user = new App\Models\User();
+$user->name = 'Admin Name';
+$user->email = 'admin@example.com';
+$user->password = Hash::make('YourPassword');
+$user->is_admin = true;
+$user->email_verified_at = now();
+$user->save();
+
+📸 Image Logic (Hero Priority)
+	1.	Custom Upload – Directly uploaded to the post
+	2.	Selected Photo – From linked gallery
+	3.	Album Cover – Default gallery cover
+	4.	Default – bg-masthead.webp
+
+Remove any custom uploaded image to show the selected gallery photo.
