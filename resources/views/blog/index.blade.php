@@ -10,7 +10,7 @@
             height: auto;
             min-height: 35rem;
             padding: 15rem 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 75%, #000000 100%), url('{{ asset('assets/img/bg-masthead.jpg') }}');
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 75%, #000000 100%), url('{{ asset('assets/img/bg-masthead.webp') }}');
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: scroll;
@@ -96,7 +96,7 @@
             @if($heroPost)
                 @php
                     // IMAGE PRIORITY LOGIC
-                    $heroImg = asset('assets/img/bg-masthead.jpg');
+                    $heroImg = asset('assets/img/bg-masthead.webp');
                     if ($heroPost->featured_image) {
                         $heroImg = Storage::url($heroPost->featured_image);
                     } elseif ($heroPost->coverPhoto) {
@@ -153,7 +153,7 @@
                     @foreach ($gridPosts as $post)
                         @php
                             // IMAGE PRIORITY LOGIC
-                            $gridImg = asset('assets/img/bg-masthead.jpg');
+                            $gridImg = asset('assets/img/bg-masthead.webp');
                             if ($post->featured_image) {
                                 $gridImg = Storage::url($post->featured_image);
                             } elseif ($post->coverPhoto) {

@@ -107,7 +107,7 @@
     @php
         // IMAGE PRIORITY LOGIC (Matches Index Page)
         // Start with default fallback
-        $bgImage = asset('assets/img/bg-masthead.jpg');
+        $bgImage = asset('assets/img/bg-masthead.webp');
 
         if ($post->featured_image) {
             // 1. Priority: Custom Uploaded Image

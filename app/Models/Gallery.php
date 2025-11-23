@@ -62,7 +62,7 @@ class Gallery extends Model
                     return Storage::url($cover->filename);
                 }
 
-                return asset('assets/img/bg-masthead.jpg');
+                return asset('assets/img/bg-masthead.webp');
             },
         );
     }

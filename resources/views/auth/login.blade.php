@@ -10,7 +10,7 @@
             width: 100%;
             height: 100vh; /* Full viewport height */
             min-height: 600px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 75%, #000000 100%), url('{{ asset('assets/img/bg-masthead.jpg') }}');
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 75%, #000000 100%), url('{{ asset('assets/img/bg-masthead.webp') }}');
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
