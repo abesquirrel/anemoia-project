@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
-use App\http\Controllers\BlogController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController; // Import admin
 use App\Http\Controllers\Admin\PhotoController as AdminPhotoController; // Import admin
