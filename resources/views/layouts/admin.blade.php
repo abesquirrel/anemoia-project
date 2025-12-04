@@ -118,11 +118,10 @@
                                 Settings
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-list fa-sm fa-fw me-3 text-gray-400"></i>
-                                Activity Log
-                            </a>
+                        <li class="nav-item {{ request()->routeIs('admin.activity_log.*') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('admin.activity_log.index') }}">
+                                <i class="fas fa-fw fa-list"></i>
+                                <span>Activity Log</span></a>
                         </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>

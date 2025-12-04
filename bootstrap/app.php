@@ -18,6 +18,23 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SecurityHeaders::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            $suspiciousPaths = ['wp-admin', '.env', 'config', 'admin', 'phpinfo'];
+
+            foreach ($suspiciousPaths as $path) {
+                if (str_contains($request->path(), $path)) {
+                    EventLog::create([
+                        'event_type' => 'suspicious_access',
+                        'message' => 'Blocked access attempt to sensitive path: ' . $request->path(),
+                        'ip_address' => $request->ip(),
+                        'user_agent' => $request->userAgent(),
+                    ]);
+                    break;
+                }
+            }
+
+            // Continue normal 404 handling
+            return null;
+        });
     })->create();

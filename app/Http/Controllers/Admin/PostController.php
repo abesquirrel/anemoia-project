@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Gallery;
 use App\Models\Post;
+use App\Models\EventLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -69,6 +70,14 @@ class PostController extends Controller
             'body' => $validated['body'],
             'featured_image' => $path,
             'published_at' => $validated['published_at'] ?? now()
+        ]);
+
+        EventLog::create([
+            'event_type' => 'content_change',
+            'message' => 'Created new blog post: ' . $validated['title'],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'user_id' => Auth::id(),
         ]);
 
         return redirect()->route('admin.posts.index')->with('success', 'Post created successfully.');
@@ -145,6 +154,14 @@ class PostController extends Controller
             'published_at' => $validated['published_at'],
         ]);
 
+        EventLog::create([
+            'event_type' => 'content_change',
+            'message' => 'Updated blog post: ' . $post->title,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'user_id' => Auth::id(),
+        ]);
+
         return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully.');
     }
 
@@ -160,6 +177,14 @@ class PostController extends Controller
 
         // Delete the post from the database
         $post->delete();
+
+        EventLog::create([
+            'event_type' => 'content_change',
+            'message' => 'Deleted blog post: ' . $post->title,
+            'ip_address' => request()->ip(), // Helper function available here
+            'user_agent' => request()->userAgent(),
+            'user_id' => Auth::id(),
+        ]);
 
         return redirect()->route('admin.posts.index')->with('success', 'Post deleted successfully.');
     }

@@ -4,8 +4,10 @@
 
     use App\Http\Controllers\Controller;
     use App\Models\Gallery;
+    use App\Models\EventLog;
     use Illuminate\Http\Request;
     use Illuminate\Support\Str;
+    use Illuminate\Support\Facades\Auth;
 
     class GalleryController extends Controller
     {
@@ -50,6 +52,14 @@
             $gallery->is_visible = $request->has('is_visible');
             $gallery->save();
 
+            EventLog::create([
+                'event_type' => 'gallery_change',
+                'message' => 'Created gallery: ' . $validated['title'],
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'user_id' => Auth::id(),
+            ]);
+
             return redirect()->route('admin.galleries.index')->with('success', 'Gallery created successfully.');
         }
 
@@ -92,6 +102,14 @@
             $gallery->is_visible = $request->has('is_visible');
             $gallery->save();
 
+            EventLog::create([
+                'event_type' => 'gallery_change',
+                'message' => 'Updated gallery: ' . $gallery->title,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'user_id' => Auth::id(),
+            ]);
+
             return redirect()->route('admin.galleries.index')->with('success', 'Gallery updated successfully.');
         }
 
@@ -106,6 +124,15 @@
             // TODO: add file deletion logic here for production
 
             $gallery->delete();
+
+            EventLog::create([
+                'event_type' => 'gallery_change',
+                'message' => 'Deleted gallery: ' . $gallery->title,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'user_id' => Auth::id(),
+            ]);
+
             return redirect()->route('admin.galleries.index')->with('success', 'Gallery deleted successfully.');
         }
 

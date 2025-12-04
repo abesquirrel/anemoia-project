@@ -7,7 +7,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController; // Import admin
 use App\Http\Controllers\Admin\PhotoController as AdminPhotoController; // Import admin
 use App\Http\Controllers\Admin\PostController as AdminPostController; // Import admin
+use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController; // Import admin
 
+Route::post('/log-event', [LoggerController::class, 'store'])->name('log.event');
 
 // ### PUBLIC SITE ###
 // This is the route for your main homepage (replaces index.php)
@@ -58,6 +60,9 @@ Route::middleware('auth')->group(function () {
 
         // 6. Ajax Request for Gallery Photos
         Route::get('galleries/{gallery}/get-photos', [AdminPostController::class, 'getGalleryPhotos'])->name('galleries.getPhotos');
+
+        // 7. Activity Log
+        Route::get('activity-log', [AdminActivityLogController::class, 'index'])->name('activity_log.index');
 
     });
 });

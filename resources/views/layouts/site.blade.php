@@ -63,5 +63,29 @@
     // Auto-update Copyright Year
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
 </script>
+<script>
+    document.addEventListener('click', function(e) {
+        let target = e.target.closest('a');
+
+        // Only track valid links that aren't just anchor jumps (#)
+        if (target) {
+            let linkUrl = target.getAttribute('href');
+
+            if (linkUrl && !linkUrl.startsWith('#') && !linkUrl.startsWith('javascript')) {
+                fetch('{{ route('log.event') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel security token
+                    },
+                    body: JSON.stringify({
+                        type: 'click',
+                        message: 'User clicked link: ' + linkUrl
+                    })
+                });
+            }
+        }
+    });
+</script>
 </body>
 </html>
