@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\EventLog;
 
 class ProfileController extends Controller
 {
@@ -26,13 +27,23 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user->fill($request->validated());
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        EventLog::create([
+            'event_type' => 'profile_updated',
+            'message' => 'User ID ' . $user->id . ' updated their profile details.',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'user_id' => $user->id,
+        ]);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -47,6 +58,14 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        EventLog::create([
+            'event_type' => 'account_deleted',
+            'message' => 'Account for user ID ' . $user->id . ' (Email: ' . $user->email . ') was successfully deleted.',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'user_id' => $user->id,
+        ]);
 
         Auth::logout();
 

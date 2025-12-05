@@ -23,14 +23,14 @@ class AppServiceProvider extends ServiceProvider
      * @noinspection PhpParamsInspection*/
     public function boot(): void
     {
-        // Listen for Failed Logins
-        Event::listen(function (Failed $event) {
-            EventLog::create([
-                'event_type' => 'security_alert',
-                'message'    => 'Failed login attempt for email: ' . $event->credentials['email'],
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-            ]);
-        });
+//        // Listen for Failed Logins
+//        Event::listen(function (Failed $event) {
+//            EventLog::create([
+//                'event_type' => 'security_alert',
+//                'message'    => 'Failed login attempt for email: ' . $event->credentials['email'],
+//                'ip_address' => request()->ip(),
+//                'user_agent' => request()->userAgent(),
+//            ]);
+//        });
     }
 }
