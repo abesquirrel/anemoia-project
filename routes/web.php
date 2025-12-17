@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\GalleryController as AdminGalleryController; // I
 use App\Http\Controllers\Admin\PhotoController as AdminPhotoController; // Import admin
 use App\Http\Controllers\Admin\PostController as AdminPostController; // Import admin
 use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController; // Import admin
+use App\Http\Controllers\LoggerController;
 
 Route::post('/log-event', [LoggerController::class, 'store'])->name('log.event');
 
