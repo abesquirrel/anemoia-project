@@ -1,6 +1,11 @@
 {{-- File: resources/views/blog/show.blade.php --}}
 @extends('layouts.site')
 
+@section('title', $post->title . ' | Anem[o]ia Journal')
+@section('description', Str::limit(strip_tags($post->content), 160))
+@section('og:type', 'article')
+@section('og:image', $post->cover_image ? Storage::url($post->cover_image) : asset('assets/img/og-default.jpg'))
+
 @section('content')
 
     <style>

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogControll
 use App\Http\Controllers\LoggerController;
 
 Route::post('/log-event', [LoggerController::class, 'store'])->name('log.event');
+Route::get('/sitemap.xml', [App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
 // ### PUBLIC SITE ###
 // This is the route for your main homepage (replaces index.php)

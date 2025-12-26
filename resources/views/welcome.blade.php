@@ -1,5 +1,8 @@
 @extends('layouts.site')
 
+@section('title', 'Return to the Echoes | Anem[o]ia')
+@section('description', 'Discover a collection of nostalgic, sepia-tinted photography exploring memory and time. Based in Sibiu, Romania.')
+
 @section('content')
 
     <header class="masthead">

@@ -3,7 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Anem[o]ia</title>
+    <title>@yield('title', 'Anem[o]ia - Nostalgic Photography')</title>
+    <meta name="description" content="@yield('description', 'Stepping through the frame into a sepia-tinted haze. Fine art photography based in Sibiu, Romania.')">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="@yield('og:type', 'website')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'Anem[o]ia - Nostalgic Photography')">
+    <meta property="og:description" content="@yield('description', 'Stepping through the frame into a sepia-tinted haze. Fine art photography based in Sibiu, Romania.')">
+    <meta property="og:image" content="@yield('og:image', asset('assets/img/og-default.jpg'))">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('title', 'Anem[o]ia - Nostalgic Photography')">
+    <meta property="twitter:description" content="@yield('description', 'Stepping through the frame into a sepia-tinted haze. Fine art photography based in Sibiu, Romania.')">
+    <meta property="twitter:image" content="@yield('og:image', asset('assets/img/og-default.jpg'))">
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 

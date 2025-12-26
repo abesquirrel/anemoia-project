@@ -1,5 +1,8 @@
 @extends('layouts.site')
 
+@section('title', 'The Journal | Anem[o]ia')
+@section('description', 'Reflections on memory, photography, and the passage of time. Read the latest entries from the Anem[o]ia journal.')
+
 @section('content')
 
     <style>
