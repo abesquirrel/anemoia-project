@@ -82,15 +82,29 @@
                     <span>Logout</span></a>
             </li>
 
+            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
+
+            <!-- Theme Toggler (New) -->
+            <div class="theme-switch-wrapper text-center">
+                 <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="themeSwitch">
+                    <label class="custom-control-label" for="themeSwitch">
+                        <span id="themeLabel">Light Mode</span>
+                    </label>
+                </div>
+            </div>
+
+             <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline mt-3">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
+
         </ul>
         <div id="content-wrapper" class="d-flex flex-column">
+            <!-- ... Content ... -->
             <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
                     
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -167,5 +181,43 @@
     <script src="{{ asset('admin_assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('admin_assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('admin_assets/js/sb-admin-2.min.js') }}"></script>
+
+    {{-- Theme Switcher Logic --}}
+    <script>
+        const toggleSwitch = document.querySelector('#themeSwitch');
+        const themeLabel = document.querySelector('#themeLabel');
+        const currentTheme = localStorage.getItem('theme');
+
+        // Function to Apply Theme
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                toggleSwitch.checked = true;
+                themeLabel.textContent = 'Dark Mode';
+            } else {
+                toggleSwitch.checked = false;
+                themeLabel.textContent = 'Light Mode';
+            }
+        }
+
+        if (currentTheme) {
+            applyTheme(currentTheme);
+        } else {
+            // Default to LIGHT MODE (Original) if no preference
+            applyTheme('light');
+        }
+
+        function switchTheme(e) {
+            if (e.target.checked) {
+                localStorage.setItem('theme', 'dark');
+                applyTheme('dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+                applyTheme('light');
+            }    
+        }
+
+        toggleSwitch.addEventListener('change', switchTheme, false);
+    </script>
     </body>
     </html>

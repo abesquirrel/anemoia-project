@@ -28,15 +28,24 @@
         <div class="card-body">
             <form action="{{ route('admin.photos.store', $gallery) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="mb-3">
-                    <label for="photos" class="form-label">Select Photos (multiple allowed)</label>
-                    <input class="form-control" type="file" id="photos" name="photos[]" multiple required>
+                <div class="custom-file-upload-area mb-3">
+                    <label for="photos" style="cursor: pointer; width: 100%;">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                        <h5 class="text-white">Tap to Select Photos</h5>
+                        <p class="text-gray-500 small mb-0">Multiple selection supported</p>
+                        <input class="form-control d-none" type="file" id="photos" name="photos[]" multiple required onchange="document.getElementById('file-chosen-text').innerText = this.files.length + ' file(s) selected'">
+                    </label>
+                    <div id="file-chosen-text" class="text-success mt-2 font-weight-bold"></div>
                 </div>
+                
                 <div class="mb-3">
-                    <label for="exif_metadata" class="form-label">Metadata (e.g., "Kodak Gold 200")</label>
-                    <input type="text" class="form-control" id="exif_metadata" name="exif_metadata" placeholder="Optional: Applied to all uploaded photos">
+                    <label for="exif_metadata" class="form-label">Batch Metadata (Optional)</label>
+                    <input type="text" class="form-control" id="exif_metadata" name="exif_metadata" placeholder="e.g. 'Kodak Gold 200'">
                 </div>
-                <button type="submit" class="btn btn-primary">Upload Photos</button>
+                
+                <button type="submit" class="btn btn-primary btn-block py-3 font-weight-bold">
+                    <i class="fas fa-upload mr-2"></i> Upload Photos
+                </button>
             </form>
         </div>
     </div>

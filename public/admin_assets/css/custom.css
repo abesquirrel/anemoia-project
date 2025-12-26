@@ -1,197 +1,215 @@
-/* Custom Theme Overrides for Anemoia Admin */
+/* Custom Theme Overrides for Anemoia Admin - RESTORED TEAL & SLATE */
 
-/* 1. Typography - Inter */
+/* 1. Typography */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Keeping Playfair just for accents, but reverting body mainly to Inter */
 
+/* 2. CSS Variables System */
+:root {
+    /* DEFAULT: LIGHT MODE (Original Teal & Slate Look) */
+    --bg-body: #f8f9fc;
+    /* SB Admin 2 Default Light Grey */
+    --bg-sidebar: #2e384d;
+    /* Deep Slate Blue (Original Sidebar) */
+    --bg-card: #ffffff;
+    /* White */
+    --bg-input: #ffffff;
+    --bg-hover: #eaecf4;
+    /* Light Grey Hover */
+
+    --text-main: #5a5c69;
+    /* Standard Dark Grey Text */
+    --text-muted: #858796;
+    --text-inverse: #ffffff;
+
+    --border-color: #e3e6f0;
+    /* Light Grey Border */
+
+    --accent-primary: #1cc88a;
+    /* Teal/Green (approximate original Teal) -> Adjusted to nice Teal #0694a2 */
+    --accent-primary: #0694a2;
+    /* Professional Teal */
+    --accent-hover: #047481;
+
+    --shadow-card: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
+}
+
+[data-theme="dark"] {
+    /* DARK MODE KEPT AS OPTION (Midnight Slate) */
+    --bg-body: #0f172a;
+    --bg-sidebar: #020617;
+    --bg-card: #1e293b;
+    --bg-input: #0f172a;
+    --bg-hover: #334155;
+
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-inverse: #0f172a;
+
+    --border-color: #334155;
+
+    --accent-primary: #94a3b8;
+    /* Silver in Dark Mode */
+    --accent-hover: #cbd5e1;
+
+    --shadow-card: none;
+}
+
+/* 3. Global Resets */
 body {
     font-family: 'Inter', sans-serif !important;
-    color: #4a5568;
-    /* Slate-700 */
-    background-color: #f8fafc;
-    /* Slate-50 */
+    background-color: var(--bg-body) !important;
+    color: var(--text-main) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 2. Brand Colors (Teal & Slate) */
-:root {
-    --primary-teal: #64a19d;
-    /* Anemoia Brand Color */
-    --primary-dark: #51827e;
-    --secondary-slate: #2d3748;
-    --bg-light: #f8fafc;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+/* Force Background on Wrappers */
+#wrapper {
+    background-color: var(--bg-body) !important;
 }
 
-/* Override Text & Background Utilities */
+#content-wrapper {
+    background-color: var(--bg-body) !important;
+}
+
+#content {
+    background-color: var(--bg-body) !important;
+}
+
+footer.sticky-footer {
+    background-color: var(--bg-body) !important;
+    color: var(--text-muted) !important;
+}
+
+/* 4. Utilities Overrides */
 .text-primary {
-    color: var(--primary-teal) !important;
+    color: var(--accent-primary) !important;
 }
 
 .bg-primary {
-    background-color: var(--primary-teal) !important;
+    background-color: var(--accent-primary) !important;
 }
 
-/* 3. Sidebar Modernization */
+.text-gray-800,
+.text-gray-900 {
+    color: var(--text-main) !important;
+}
+
+.text-gray-600,
+.text-gray-500,
+.text-gray-400 {
+    color: var(--text-muted) !important;
+}
+
+/* 5. Sidebar */
 #accordionSidebar {
-    background: #1a202c;
-    /* Slate-900 solid instead of gradient */
-    background-image: none;
-    border-right: 1px solid #2d3748;
+    background: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-color);
+    background-image: linear-gradient(180deg, #2e384d 10%, #222a3a 100%) !important;
+    /* Restore subtle gradient */
 }
 
 .sidebar .nav-item .nav-link {
-    color: #a0aec0;
-    /* Slate-400 */
+    color: rgba(255, 255, 255, 0.8) !important;
     font-weight: 500;
 }
 
-.sidebar .nav-item.active .nav-link {
-    color: #fff;
-    font-weight: 600;
-    background-color: rgba(255, 255, 255, 0.08);
-    border-left: 4px solid var(--primary-teal);
-    padding-left: 0.75rem;
-    /* Compensate for border */
+.sidebar .nav-item .nav-link:hover {
+    color: #fff !important;
 }
 
-/* 4. Cards & Containers */
+.sidebar .nav-item.active .nav-link {
+    color: #fff !important;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid var(--accent-primary);
+}
+
+.sidebar-heading {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* 6. Cards */
 .card {
-    border: none;
-    border-radius: 0.75rem;
-    /* More rounded */
-    box-shadow: var(--card-shadow) !important;
-    margin-bottom: 2rem;
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-card) !important;
+    border-radius: 0.35rem;
 }
 
 .card-header {
-    background-color: #fff;
-    border-bottom: 1px solid #edf2f7;
-    font-weight: 600;
-    color: #2d3748;
-    border-radius: 0.75rem 0.75rem 0 0 !important;
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
+    background-color: #f8f9fc !important;
+    /* Light Grey Header Main */
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--accent-primary) !important;
+    /* Teal Header Text */
+    font-weight: 700 !important;
+    font-family: 'Inter', sans-serif !important;
+    /* Revert header font */
 }
 
-/* 5. Buttons */
+[data-theme="dark"] .card-header {
+    background-color: rgba(15, 23, 42, 0.5) !important;
+    font-family: 'Playfair Display', serif !important;
+}
+
+/* 7. Buttons */
 .btn-primary {
-    background-color: var(--primary-teal);
-    border-color: var(--primary-teal);
-    box-shadow: 0 4px 6px rgba(100, 161, 157, 0.25);
-    transition: all 0.2s;
+    background-color: var(--accent-primary) !important;
+    border-color: var(--accent-primary) !important;
+    color: #fff !important;
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-dark);
-    border-color: var(--primary-dark);
-    transform: translateY(-1px);
+    background-color: var(--accent-hover) !important;
+    border-color: var(--accent-hover) !important;
 }
 
-.btn-circle {
-    border-radius: 50%;
+.btn-light {
+    background-color: var(--bg-hover);
+    border-color: var(--border-color);
+    color: var(--text-main);
 }
 
-/* 6. Topbar */
+/* 8. Topbar */
 .topbar {
-    background-color: #fff !important;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-    border-bottom: 1px solid #edf2f7;
+    background-color: var(--bg-card) !important;
+    /* White Topbar */
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
-/* 7. Tables */
+/* 9. Tables */
+.table {
+    color: var(--text-main);
+}
+
 .table th {
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    color: #718096;
-    background-color: #f7fafc;
-    border-top: none;
+    background-color: var(--bg-hover);
+    color: var(--text-main);
+    border-color: var(--border-color);
 }
 
 .table td {
-    vertical-align: middle;
-    color: #4a5568;
+    border-color: var(--border-color);
 }
 
-/* 8. Activity Log Timeline */
-.timeline {
-    position: relative;
-    padding: 1rem 0;
+/* 10. Forms */
+.form-control,
+.custom-select {
+    background-color: var(--bg-input);
+    border: 1px solid #d1d3e2;
+    /* Original border color */
+    color: var(--text-main);
 }
 
-.timeline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 20px;
-    width: 2px;
-    background: #e2e8f0;
+.form-control:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 0.2rem rgba(6, 148, 162, 0.25);
 }
 
-.timeline-item {
-    position: relative;
-    margin-bottom: 2rem;
-    padding-left: 50px;
-}
-
-.timeline-marker {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid #e2e8f0;
+/* 11. Theme Switcher */
+.theme-switch-wrapper {
+    color: rgba(255, 255, 255, 0.8);
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 1;
-    color: #a0aec0;
-}
-
-.timeline-marker.success {
-    border-color: #48bb78;
-    color: #48bb78;
-    background: #f0fff4;
-}
-
-.timeline-marker.danger {
-    border-color: #f56565;
-    color: #f56565;
-    background: #fff5f5;
-}
-
-.timeline-marker.info {
-    border-color: #4299e1;
-    color: #4299e1;
-    background: #ebf8ff;
-}
-
-.timeline-marker.warning {
-    border-color: #ed8936;
-    color: #ed8936;
-    background: #fffaf0;
-}
-
-.timeline-content .card {
-    margin-bottom: 0;
-    border-left: 4px solid transparent;
-}
-
-.timeline-content .card.success {
-    border-left-color: #48bb78;
-}
-
-.timeline-content .card.danger {
-    border-left-color: #f56565;
-}
-
-.timeline-content .card.info {
-    border-left-color: #4299e1;
-}
-
-.timeline-content .card.warning {
-    border-left-color: #ed8936;
+    margin-bottom: 1rem;
 }
