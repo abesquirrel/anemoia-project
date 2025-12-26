@@ -13,6 +13,16 @@
         <link href="{{ asset('admin_assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
         <style>
+            /* Scrollbar Hiding */
+            /* Chrome, Safari and Opera */
+            ::-webkit-scrollbar {
+                display: none;
+            }
+            /* IE and Edge */
+            -ms-overflow-style: none;
+            /* Firefox */
+            scrollbar-width: none;
+
             :root {
                 --bs-primary: #64a19d;
                 --bs-primary-rgb: 100, 161, 157;
@@ -66,6 +76,20 @@
             }
             .sidebar-divider {
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            /* Improved Mobile Spacing */
+            @media (max-width: 768px) {
+                .container-fluid {
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                }
+                .card-header {
+                    padding: 0.75rem 1rem;
+                }
+                .btn-sm {
+                   padding: 0.375rem 0.75rem; /* Larger touch target */
+                }
             }
         </style>
     </head>
