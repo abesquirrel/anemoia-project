@@ -23,5 +23,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \Illuminate\Pagination\Paginator::useBootstrapFive();
+
+        // Register User Observer
+        \App\Models\User::observe(\App\Observers\UserObserver::class);
+
+        // Register Auth Listeners
+        Event::listen(\Illuminate\Auth\Events\Login::class, \App\Listeners\LogSuccessfulLogin::class);
+        Event::listen(\Illuminate\Auth\Events\Logout::class, \App\Listeners\LogLogout::class);
+        Event::listen(\Illuminate\Auth\Events\Registered::class, \App\Listeners\LogUserRegistration::class);
     }
 }

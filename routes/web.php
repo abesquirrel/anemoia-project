@@ -35,9 +35,9 @@ Route::middleware('auth')->group(function () {
 
     // File: routes/web.php
 
-// ... (Your public routes stay the same)
+    // ... (Your public routes stay the same)
 
-// ### ADMIN-ONLY ROUTES ###
+    // ### ADMIN-ONLY ROUTES ###
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
         // 1. Gallery Management (CRUD)
@@ -65,7 +65,9 @@ Route::middleware('auth')->group(function () {
         // 7. Activity Log
         Route::get('activity-log', [AdminActivityLogController::class, 'index'])->name('activity_log.index');
 
+        // 8. User Management
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class); // Manually registered for clarity
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -54,6 +54,13 @@
                     <i class="fas fa-fw fa-list"></i>
                     <span>Activity Log</span></a>
             </li>
+
+            <!-- Nav Item - User Management -->
+            <li class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.users.index') }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Users</span></a>
+            </li>
             <hr class="sidebar-divider d-none d-md-block">
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
