@@ -1,105 +1,138 @@
-# 🌌 Anem[o]ia – Photography Portfolio & Journal
+# 🌌 Anem[o]ia – Nostalgic Photography & Journal
 
-[![Laravel Version](https://img.shields.io/badge/Laravel-12-orange)](https://laravel.com/)
-[![PHP Version](https://img.shields.io/badge/PHP-8.3+-blue)](https://www.php.net/)
+[![Laravel Version](https://img.shields.io/badge/Laravel-11-orange)](https://laravel.com/)
+[![PHP Version](https://img.shields.io/badge/PHP-8.2+-blue)](https://www.php.net/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple)](https://getbootstrap.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![Issues](https://img.shields.io/github/issues/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/issues)
-[![Stars](https://img.shields.io/github/stars/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/stargazers)
-[![Forks](https://img.shields.io/github/forks/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/network)
-[![Last Commit](https://img.shields.io/github/last-commit/yourusername/anemoia-project)](https://github.com/yourusername/anemoia-project/commits/main)
 
-Anem[o]ia is a **dynamic photography portfolio and journal** built with Laravel 12. Showcase your galleries, blog stories, and manage everything through a modern admin panel.  
-Featuring a **dark-themed responsive design**, integrated blog/gallery linking, and an intelligent storytelling experience.
+Anem[o]ia is a **fine-art photography portfolio and storytelling platform**. It bridges the gap between visual galleries and narrative journaling, designed with a distinct "nostalgic" aesthetic that blends vintage sentiment with modern performance.
 
+---
 
+## ✨ Key Features
 
-## ✨ Features
+### 🎨 Visual & Experience
+- **Cinematic "Noir" Admin Theme**: A custom-built admin interface featuring a **Dual Theme System**:
+    - **Midnight Slate (Dark Mode)**: A professional, deep-slate interface for focused editing.
+    - **Teal & Slate (Light Mode)**: A clean, airy workspace for daylight hours.
+    - *Toggle instantly via the Sidebar.*
+- **Responsive Galleries**: Masonry-style grids with `GLightbox` integration for immersive viewing.
+- **Journaling Engine**: A dedicated blog section where specific photos can be highlighted as "Hero Images" for stories.
 
-### 🖼 Public Site
-- **Dynamic Galleries** – Responsive masonry grid + GLightbox.
-- **Journal / Blog** – Magazine-style posts with "Hero" images.
-- **Storytelling** – Link posts to galleries with featured gallery cards.
-- **Responsive Design** – Bootstrap 5 with custom "Grayscale" dark theme.
+### 🛡️ Security & Performance
+- **Enterprise-Grade Security**:
+    - **CSP (Content Security Policy)**: Strict whitelist for scripts and styles to prevent XSS.
+    - **HSTS**: Enforced HTTPS transport security.
+    - **Permissions Policy**: Privacy-focused headers blocking camera/mic access.
+    - **Activity Logging**: Tracks suspicious access attempts (e.g., `/wp-admin` probes).
+- **SEO Optimized**:
+    - **Dynamic Meta Tags**: Automated Title, Description, and OpenGraph (Facebook/Twitter) tags for every page.
+    - **XML Sitemap**: Auto-generated at `/sitemap.xml` for instant Google indexing.
 
-### 🔧 Admin Panel
-- **Secure Dashboard** – Laravel Breeze + custom roles.
-- **Gallery Management** – Create/edit/delete albums, bulk uploads with auto-resize & compression.
-- **Photo Management**:
-    - Drag & drop multiple images (max 1920px, JPG, 80% compressed).
-    - Toggle visibility (drafts / hidden).
-    - Set any photo as album cover.
-- **Blog Management**:
-    - Visual Hero Image selector from galleries.
-    - Image priority: Custom Upload > Selected Photo > Album Cover.
-    - Draft & scheduled posts support.
+### 🔧 Powerful Admin Panel
+- **Role-Based Access Control (RBAC)**:
+    - **Admins**: Full control (Create, Delete, Manage Users).
+    - **Editors**: Restricted "Editor Mode" (Can edit content, but cannot delete or create new system assets).
+- **Dashboard Metrics**: Real-time stats on Storage Usage, Featured Galleries, and Recent Activity.
+- **Media Management**:
+    - Drag-and-drop uploads with mobile-friendly touch targets.
+    - Automatic image resizing and optimization.
+    - "Set as Cover" status for gallery management.
 
-
+---
 
 ## 🛠 Technology Stack
-- **Framework**: Laravel 12 (PHP 8.3+)
-- **Frontend**: Blade + Bootstrap 5 (SB Admin 2 for Admin, Grayscale for Public)
+
+- **Framework**: Laravel 11 (PHP 8.2+)
+- **Frontend**: Blade Templates + Bootstrap 5 + Custom CSS Variables
 - **Database**: MySQL / MariaDB
-- **Image Processing**: Intervention Image v3
-- **Server**: Optimized for cPanel / LiteSpeed
+- **Assets**: Vite for bundling
+- **Image Processing**: Intervention Image
+- **Server**: Optimized for LiteSpeed / Apache
 
-
+---
 
 ## 🚀 Installation & Setup
 
 ### Prerequisites
-- PHP ≥ 8.3, Composer, Node.js & NPM, MySQL
+- PHP ≥ 8.2
+- Composer
+- Node.js & NPM
+- MySQL
 
 ### Local Development
 ```bash
+# 1. Clone the repository
 git clone https://github.com/yourusername/anemoia-project.git
 cd anemoia-project
+
+# 2. Install Dependencies
 composer install
 npm install
+
+# 3. Configure Environment
 cp .env.example .env
 php artisan key:generate
-# update .env with DB credentials
+# Update .env with your DB credentials
+
+# 4. Migrate Database
 php artisan migrate
+
+# 5. Run Server
 npm run dev
 php artisan serve
+```
 
-Production (cPanel / Shared Hosting)
-	1.	Build assets locally: npm run build
-	2.	Push & pull to server via Git
-	3.	Ensure document root → /public, PHP 8.3, fileinfo enabled
-	4.	SSH Deployment Commands:
-
+### Production Deployment
+```bash
+# Optimized for cPanel / Shared Hosting / VPS
 composer install --no-dev --optimize-autoloader
+npm run build
 php artisan migrate --force
-php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan storage:link
-pkill -9 php # LiteSpeed restart
+```
 
+---
 
-📂 Key Project Structure
-	•	app/Models – Gallery, Photo, Post
-	•	app/Http/Controllers/Admin – Admin logic
-	•	resources/views/layouts – site.blade.php, admin.blade.php
-	•	resources/views/blog – Journal views
-	•	routes/web.php – Public & Admin routes
+## 📸 Usage Guide
 
-👤 Default Admin User
+### Managing Galleries
+1.  Navigate to **Galleries** in the Admin Sidebar.
+2.  Create a nice Album (e.g., "Transylvanian Winters").
+3.  Upload photos using the **drag-and-drop zone**.
+4.  Star your favorite galleries to feature them on the Dashboard.
 
-$user = new App\Models\User();
-$user->name = 'Admin Name';
-$user->email = 'admin@example.com';
-$user->password = Hash::make('YourPassword');
-$user->is_admin = true;
-$user->email_verified_at = now();
-$user->save();
+### Journal / Blog
+1.  Go to **Posts**.
+2.  Write your story using the rich editor.
+3.  **Link a Gallery**: Select a gallery to automatically pull its cover image as the post header.
+4.  **Editor Mode**: If you give a user "Editor" permissions, they can polish the text but cannot accidentally delete the post.
 
-📸 Image Logic (Hero Priority)
-	1.	Custom Upload – Directly uploaded to the post
-	2.	Selected Photo – From linked gallery
-	3.	Album Cover – Default gallery cover
-	4.	Default – bg-masthead.webp
+---
 
-Remove any custom uploaded image to show the selected gallery photo.
+## 📂 Project Structure
+
+- `app/Http/Controllers/Admin/*`: Logic for the secure dashboard.
+- `app/Http/Middleware/SecurityHeaders.php`: Custom middleware for CSP/HSTS.
+- `resources/views/layouts/site.blade.php`: The public face (SEO optimized).
+- `public/admin_assets/css/custom.css`: The engine behind the **Dual Theme** system.
+
+---
+
+## 👤 Default User Setup
+
+To create your first admin user manually via Tinker:
+
+```php
+php artisan tinker
+
+$u = new App\Models\User();
+$u->name = 'Admin';
+$u->email = 'admin@anemoia.com';
+$u->password = Hash::make('password');
+$u->is_admin = true;
+$u->save();
+```
