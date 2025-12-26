@@ -8,10 +8,13 @@
                 <i class="fas fa-plus fa-sm text-white-50 mr-2"></i>New Post
             </a>
         @else
-            <div class="card bg-info text-white shadow-sm">
-                <div class="card-body py-2 px-3">
-                    <i class="fas fa-user-edit mr-2"></i> 
-                    <strong>Editor Mode Protected:</strong> You can edit existing posts, but cannot create or delete them.
+            <div class="alert alert-info shadow-sm border-left-info" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-user-edit fa-lg mr-3"></i>
+                    <div>
+                        <strong>Editor Mode Protected:</strong><br>
+                        You can edit existing posts, but cannot create or delete them.
+                    </div>
                 </div>
             </div>
         @endif
