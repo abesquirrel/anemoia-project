@@ -212,4 +212,37 @@ footer.sticky-footer {
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
+    padding: 0 1rem;
+}
+
+.theme-switch-wrapper .custom-control-label {
+    font-size: 0.85rem;
+    /* Smaller text */
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Hide the Theme Switcher label when Sidebar is Toggled (Collapsed) */
+.sidebar.toggled .theme-switch-wrapper #themeLabel {
+    display: none;
+}
+
+/* Center the switch itself when toggled */
+.sidebar.toggled .theme-switch-wrapper .custom-control {
+    padding-left: 0;
+    margin: 0;
+}
+
+/* On very small mobile screens, the sidebar fills the screen, so keep it visible.
+   But if it's the "toggled" state effectively used for desktop collapse: */
+@media (min-width: 768px) {
+    .sidebar.toggled .theme-switch-wrapper {
+        justify-content: center;
+    }
+
+    .sidebar.toggled .theme-switch-wrapper .custom-control-label::before,
+    .sidebar.toggled .theme-switch-wrapper .custom-control-label::after {
+        /* Adjust position if needed, or rely on Bootstrap's default alignment */
+        left: -1.5rem;
+    }
 }
