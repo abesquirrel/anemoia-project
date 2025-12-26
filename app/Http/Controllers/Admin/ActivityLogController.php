@@ -13,7 +13,7 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        $logs = EventLog::latest()->paginate(20);
+        $logs = EventLog::with('user')->latest()->paginate(20);
         return view('admin.activity_log.index', compact('logs'));
     }
 }

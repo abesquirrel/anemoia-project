@@ -16,4 +16,9 @@ class EventLog extends Model
         'user_agent',
         'user_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

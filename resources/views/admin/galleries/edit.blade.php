@@ -19,38 +19,80 @@
                 @csrf
                 @method('PUT')
 
-                <div class="mb-3">
-                    <label for="title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $gallery->title) }}" required>
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $gallery->description) }}</textarea>
-                </div>
-                <div class="row justify-content-center">
-                    <div class="col-md-4 mb-3">
-                        <label for="camera" class="form-label">Camera (Optional)</label>
-                        <input type="text" class="form-control" id="camera" name="camera" value="{{ old('camera', $gallery->camera) }}">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="lens" class="form-label">Lens (Optional)</label>
-                        <input type="text" class="form-control" id="lens" name="lens" value="{{ old('lens', $gallery->lens) }}">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="film" class="form-label">Film (Optional)</label>
-                        <input type="text" class="form-control" id="film" name="film" value="{{ old('film', $gallery->film) }}">
-                    </div>
-                </div>
-                <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible" value="1"
-                        {{ old('is_visible', $gallery->is_visible) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="is_visible">
-                        Visible on public site
-                    </label>
-                </div>
+                <div class="row">
+                    {{-- LEFT COLUMN: Main Content --}}
+                    <div class="col-lg-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Gallery Details</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label font-weight-bold">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $gallery->title) }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label font-weight-bold">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="5">{{ old('description', $gallery->description) }}</textarea>
+                                </div>
+                            </div>
+                        </div>
 
-                <a href="{{ route('admin.galleries.index') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Update Gallery</button>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Technical Specs</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="camera" class="form-label">Camera</label>
+                                        <input type="text" class="form-control" id="camera" name="camera" value="{{ old('camera', $gallery->camera) }}">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="lens" class="form-label">Lens</label>
+                                        <input type="text" class="form-control" id="lens" name="lens" value="{{ old('lens', $gallery->lens) }}">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="film" class="form-label">Film Stock</label>
+                                        <input type="text" class="form-control" id="film" name="film" value="{{ old('film', $gallery->film) }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- RIGHT COLUMN: Meta Data & Actions --}}
+                    <div class="col-lg-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Publishing</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="is_visible" name="is_visible" value="1"
+                                        {{ old('is_visible', $gallery->is_visible) ? 'checked' : '' }}>
+                                    <label class="form-check-label font-weight-bold" for="is_visible">
+                                        Visible on Public Site
+                                    </label>
+                                </div>
+
+                                <div class="alert alert-info small">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Last updated: {{ $gallery->updated_at->diffForHumans() }}
+                                </div>
+
+                                <hr>
+                                
+                                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                                    <i class="fas fa-save mr-2"></i> Update Gallery
+                                </button>
+                                <a href="{{ route('admin.galleries.index') }}" class="btn btn-light btn-block text-secondary border">
+                                    Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

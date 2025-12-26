@@ -15,12 +15,13 @@
             @endif
 
                             <div class="table-responsive d-none d-md-block">
-                                <table class="table table-striped table-bordered">
-                                    <thead>
+                                <table class="table table-hover align-middle">
+                                    <thead class="bg-light">
                                     <tr>
+                                        <th style="width: 100px;">Cover</th>
                                         <th>Title</th>
                                         <th style="width: 10%;">Visible</th>
-                                        <th style="width: 10%;">Photo Count</th>
+                                        <th style="width: 10%;">Count</th>
                                         <th style="width: 15%;">Created</th>
                                         <th style="width: 25%;">Actions</th>
                                     </tr>
@@ -28,42 +29,51 @@
                                     <tbody>
                                     @forelse ($galleries as $gallery)
                                         <tr>
-                                            <td>{{ $gallery->title }}</td>
+                                            <td>
+                                                <div class="rounded overflow-hidden shadow-sm" style="width: 80px; height: 60px;">
+                                                    <img src="{{ $gallery->cover_photo_url }}" alt="{{ $gallery->title }}" class="w-100 h-100" style="object-fit: cover;">
+                                                </div>
+                                            </td>
+                                            <td class="font-weight-bold text-dark">{{ $gallery->title }}</td>
                                             <td>
                                                 @if($gallery->is_visible)
-                                                    <span class="badge bg-success">Yes</span>
+                                                    <span class="badge badge-pill badge-success">Yes</span>
                                                 @else
-                                                    <span class="badge bg-secondary">No</span>
+                                                    <span class="badge badge-pill badge-secondary">No</span>
                                                 @endif
                                             </td>
                                             <td>{{ $gallery->photos_count }}</td>
                                             <td>{{ $gallery->created_at->format('Y-m-d') }}</td>
-                                            <td style="min-width: 300px;">
-                                                <a href="{{ route('admin.photos.index', $gallery) }}" class="btn btn-info btn-sm">Photos</a>
-                                                <a href="{{ route('admin.galleries.edit', $gallery) }}" class="btn btn-warning btn-sm">Edit</a>
-                                                @if($gallery->featured_at)
-                                                    <form action="{{ route('admin.galleries.unfeature', $gallery) }}" method="POST" class="d-inline">
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="{{ route('admin.photos.index', $gallery) }}" class="btn btn-outline-info" title="Photos"><i class="fas fa-images"></i></a>
+                                                    <a href="{{ route('admin.galleries.edit', $gallery) }}" class="btn btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a>
+                                                    
+                                                    @if($gallery->featured_at)
+                                                        <form action="{{ route('admin.galleries.unfeature', $gallery) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="btn btn-outline-warning" title="Unfeature"><i class="fas fa-star"></i></button>
+                                                        </form>
+                                                    @else
+                                                        <form action="{{ route('admin.galleries.feature', $gallery) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="btn btn-outline-secondary" title="Feature"><i class="far fa-star"></i></button>
+                                                        </form>
+                                                    @endif
+                                                    
+                                                    <form action="{{ route('admin.galleries.destroy', $gallery) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                                         @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="btn btn-secondary btn-sm">Unfeature</button>
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="fas fa-trash"></i></button>
                                                     </form>
-                                                @else
-                                                    <form action="{{ route('admin.galleries.feature', $gallery) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="btn btn-primary btn-sm">Feature</button>
-                                                    </form>
-                                                @endif
-                                                <form action="{{ route('admin.galleries.destroy', $gallery) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                                </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center">No galleries found. Create one!</td>
+                                            <td colspan="6" class="text-center py-4">No galleries found. Create one!</td>
                                         </tr>
                                     @endforelse
                                     </tbody>
@@ -73,49 +83,53 @@
                             {{-- Mobile Card View (< md) --}}
                             <div class="d-md-none">
                                 @forelse ($galleries as $gallery)
-                                    <div class="card mb-3 border-left-primary shadow-sm">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h5 class="card-title font-weight-bold text-primary mb-0">{{ $gallery->title }}</h5>
-                                                @if($gallery->is_visible)
-                                                    <span class="badge bg-success">Visible</span>
-                                                @else
-                                                    <span class="badge bg-secondary">Hidden</span>
-                                                @endif
+                                    <div class="card mb-4 overflow-hidden border-0 shadow">
+                                        <!-- Cover Image Header -->
+                                        <div style="height: 160px; overflow: hidden; position: relative;">
+                                            <img src="{{ $gallery->cover_photo_url }}" class="w-100" style="position: absolute; top: 50%; transform: translateY(-50%); width: 100%; min-height: 100%; object-fit: cover;">
+                                            <div class="position-absolute bottom-0 w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                                                 <h5 class="text-white font-weight-bold mb-0">{{ $gallery->title }}</h5>
                                             </div>
-                                            <p class="card-text small text-muted mb-2">
-                                                Created: {{ $gallery->created_at->format('M d, Y') }} &bull;
-                                                {{ $gallery->photos_count }} Photos
-                                            </p>
-                                            <div class="d-flex flex-wrap gap-2">
-                                                <a href="{{ route('admin.photos.index', $gallery) }}" class="btn btn-info btn-sm mb-1 flex-grow-1">Photos</a>
-                                                <a href="{{ route('admin.galleries.edit', $gallery) }}" class="btn btn-warning btn-sm mb-1 flex-grow-1">Edit</a>
-
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between mb-3">
+                                                <div>
+                                                     @if($gallery->is_visible)
+                                                        <span class="badge badge-success">Visible</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Hidden</span>
+                                                    @endif
+                                                    @if($gallery->featured_at)
+                                                        <span class="badge badge-warning">Featured</span>
+                                                    @endif
+                                                </div>
+                                                <span class="text-muted small"><i class="fas fa-camera mr-1"></i> {{ $gallery->photos_count }} Photos</span>
+                                            </div>
+                                            
+                                            <div class="btn-group w-100 shadow-sm">
+                                               <a href="{{ route('admin.photos.index', $gallery) }}" class="btn btn-white border"><i class="fas fa-images text-info"></i></a>
+                                               <a href="{{ route('admin.galleries.edit', $gallery) }}" class="btn btn-white border"><i class="fas fa-edit text-primary"></i></a>
                                                 @if($gallery->featured_at)
-                                                    <form action="{{ route('admin.galleries.unfeature', $gallery) }}" method="POST" class="d-inline mb-1 flex-grow-1">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="w-100 btn btn-secondary btn-sm">Unfeature</button>
+                                                    <form action="{{ route('admin.galleries.unfeature', $gallery) }}" method="POST" class="d-inline flex-fill">
+                                                        @csrf @method('PATCH')
+                                                        <button class="btn btn-white w-100 border text-warning"><i class="fas fa-star"></i></button>
                                                     </form>
                                                 @else
-                                                    <form action="{{ route('admin.galleries.feature', $gallery) }}" method="POST" class="d-inline mb-1 flex-grow-1">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="w-100 btn btn-primary btn-sm">Feature</button>
+                                                    <form action="{{ route('admin.galleries.feature', $gallery) }}" method="POST" class="d-inline flex-fill">
+                                                        @csrf @method('PATCH')
+                                                        <button class="btn btn-white w-100 border text-secondary"><i class="far fa-star"></i></button>
                                                     </form>
                                                 @endif
-
-                                                <form action="{{ route('admin.galleries.destroy', $gallery) }}" method="POST" class="d-inline mb-1 flex-grow-1" onsubmit="return confirm('Are you sure?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="w-100 btn btn-danger btn-sm">Delete</button>
+                                               <form action="{{ route('admin.galleries.destroy', $gallery) }}" method="POST" class="d-inline flex-fill" onsubmit="return confirm('Are you sure?');">
+                                                    @csrf @method('DELETE')
+                                                    <button class="btn btn-white w-100 border text-danger"><i class="fas fa-trash"></i></button>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 @empty
                                     <div class="text-center p-3">
-                                        <p class="text-muted">No galleries found. Create one!</p>
+                                        <p class="text-muted">No galleries found.</p>
                                     </div>
                                 @endforelse
                             </div>

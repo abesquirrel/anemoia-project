@@ -38,114 +38,152 @@
                 @csrf
                 @method('PUT')
 
-                <div class="mb-3">
-                    <label for="title" class="form-label font-weight-bold">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $post->title) }}" required>
-                </div>
+                <div class="row">
+                    {{-- LEFT COLUMN: Content --}}
+                    <div class="col-lg-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Post Content</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label font-weight-bold">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $post->title) }}" required>
+                                </div>
 
-                {{-- 1. GALLERY SELECTOR (Required for logic) --}}
-                <div class="mb-3">
-                    <label for="gallery_id" class="form-label font-weight-bold">Link a Gallery (Optional)</label>
-                    <select class="form-control" id="gallery_id" name="gallery_id">
-                        <option value="">-- No Gallery --</option>
-                        @foreach($galleries as $gallery)
-                            <option value="{{ $gallery->id }}" {{ old('gallery_id', $post->gallery_id) == $gallery->id ? 'selected' : '' }}>
-                                {{ $gallery->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <small class="text-muted">Selecting a gallery enables the photo selector below.</small>
-                </div>
-
-                {{-- 2. VISUAL PHOTO SELECTOR --}}
-                <div class="mb-4 p-3 border rounded bg-light">
-                    <label class="form-label font-weight-bold">Cover Photo (From Selected Album)</label>
-
-                    {{-- Hidden Field to store the selection --}}
-                    <input type="hidden" id="cover_photo_id" name="cover_photo_id" value="{{ old('cover_photo_id', $post->cover_photo_id) }}">
-
-                    <div class="d-flex align-items-center">
-                        {{-- Preview Box --}}
-                        <div id="main-preview-container" class="border rounded bg-white d-flex align-items-center justify-content-center shadow-sm position-relative"
-                             style="width: 150px; height: 100px; overflow: hidden; flex-shrink: 0;">
-                            <img id="main-preview-img" src="" class="d-none w-100 h-100" style="object-fit: cover;">
-                            <span id="main-preview-placeholder" class="text-muted small text-center px-2">No Photo Selected</span>
-                            <button type="button" id="clear-selection-btn" class="btn btn-sm btn-danger position-absolute top-0 right-0 m-1 p-0 d-none"
-                                    style="width: 20px; height: 20px; line-height: 1;" title="Remove Selection">&times;</button>
-                        </div>
-
-                        {{-- Trigger Button --}}
-                        <div class="ml-4"> {{-- Changed ms-4 to ml-4 for Bootstrap 4 --}}
-                            <button type="button" class="btn btn-outline-primary" id="open-photo-modal" disabled>
-                                <i class="fas fa-images me-2"></i> Browse Album Photos
-                            </button>
-                            <div class="form-text text-muted mt-1" id="gallery-hint">
-                                Select a gallery above to enable this.
+                                <div class="mb-3">
+                                    <label for="body" class="form-label font-weight-bold">Content Body</label>
+                                    <textarea class="form-control" id="body" name="body" rows="15" required>{{ old('body', $post->body) }}</textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                {{-- END VISUAL SELECTOR --}}
 
-                <div class="mb-3">
-                    <label for="body" class="form-label font-weight-bold">Body</label>
-                    <textarea class="form-control" id="body" name="body" rows="10" required>{{ old('body', $post->body) }}</textarea>
-                </div>
+                        {{-- Link to Gallery --}}
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Gallery Association</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="gallery_id" class="form-label font-weight-bold">Link a Gallery (Optional)</label>
+                                    <select class="form-control" id="gallery_id" name="gallery_id">
+                                        <option value="">-- No Gallery --</option>
+                                        @foreach($galleries as $gallery)
+                                            <option value="{{ $gallery->id }}" {{ old('gallery_id', $post->gallery_id) == $gallery->id ? 'selected' : '' }}>
+                                                {{ $gallery->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted">Linking a gallery allows you to select a cover photo from that gallery below.</small>
+                                </div>
 
-                <div class="row">
-                    {{-- Featured Image (Custom Upload) --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label font-weight-bold">Featured Image (Custom Upload)</label>
+                                {{-- VISUAL PHOTO SELECTOR --}}
+                                <div class="p-3 border rounded bg-light mt-3">
+                                    <label class="form-label font-weight-bold small text-uppercase text-muted mb-3">Cover Photo Selection</label>
+                                    
+                                    {{-- Hidden Field --}}
+                                    <input type="hidden" id="cover_photo_id" name="cover_photo_id" value="{{ old('cover_photo_id', $post->cover_photo_id) }}">
 
-                        {{-- Styled File Input --}}
-                        <div class="d-flex align-items-center">
-                            <label class="btn btn-outline-secondary mb-0" for="featured_image">
-                                <i class="fas fa-upload me-2"></i> Choose File
-                            </label>
-                            <input type="file" class="d-none" id="featured_image" name="featured_image"
-                                   onchange="document.getElementById('file-name-display').textContent = this.files[0] ? this.files[0].name : 'No file chosen'">
-                            <span id="file-name-display" class="ml-3 text-muted font-italic">No file chosen</span> {{-- Changed ms-3 to ml-3 --}}
-                        </div>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                        {{-- Preview Box --}}
+                                        <div id="main-preview-container" class="border rounded bg-white d-flex align-items-center justify-content-center shadow-sm position-relative mr-3 mb-2"
+                                             style="width: 120px; height: 120px; overflow: hidden; flex-shrink: 0;">
+                                            <img id="main-preview-img" src="" class="d-none w-100 h-100" style="object-fit: cover;">
+                                            <span id="main-preview-placeholder" class="text-muted small text-center px-2">No Photo<br>Selected</span>
+                                            <button type="button" id="clear-selection-btn" class="btn btn-sm btn-danger position-absolute top-0 right-0 m-1 p-0 d-none"
+                                                    style="width: 20px; height: 20px; line-height: 1;" title="Remove Selection">&times;</button>
+                                        </div>
 
-                        @if($post->featured_image)
-                            <div class="mt-3 p-2 border rounded bg-white">
-                                <div class="d-flex align-items-center">
-                                    <img src="{{ Storage::url($post->featured_image) }}" class="mr-3 rounded" style="width: 60px; height: 60px; object-fit: cover;"> {{-- Changed me-3 to mr-3 --}}
-                                    <div>
-                                        <small class="text-muted d-block mb-1">Current Image</small>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="remove_featured_image" name="remove_featured_image" value="1">
-                                            <label class="form-check-label text-danger small" for="remove_featured_image">
-                                                Remove this image
-                                            </label>
+                                        {{-- Trigger Button --}}
+                                        <div class="flex-grow-1">
+                                            <button type="button" class="btn btn-outline-primary btn-block mb-2" id="open-photo-modal" disabled>
+                                                <i class="fas fa-images mr-2"></i> Browse Gallery Photos
+                                            </button>
+                                            <div class="small text-muted font-italic" id="gallery-hint">
+                                                Select a gallery above to enable.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
-                        <small class="form-text text-muted mt-2 d-block">Overrides the selected Album Photo.</small>
+                        </div>
                     </div>
 
-                    {{-- Publish Date --}}
-                    <div class="col-md-6 mb-3">
-                        <label for="published_at" class="form-label font-weight-bold">Publish Date</label>
-                        <div class="input-group">
-                            <input type="datetime-local" class="form-control" id="published_at" name="published_at"
-                                   value="{{ old('published_at', $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '') }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('published_at').value = ''">
-                                    Clear
-                                </button>
+                    {{-- RIGHT COLUMN: Meta Data --}}
+                    <div class="col-lg-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Publishing & Media</h6>
                             </div>
-                        </div>
-                        <div class="form-text text-muted mt-1">
-                            <a href="#" class="text-decoration-none" onclick="setNow(event)">Click here to set to NOW</a>
+                            <div class="card-body">
+                                {{-- Publish Date --}}
+                                <div class="mb-4">
+                                    <label for="published_at" class="form-label font-weight-bold">Publish Date</label>
+                                    <div class="input-group">
+                                        <input type="datetime-local" class="form-control" id="published_at" name="published_at"
+                                               value="{{ old('published_at', $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '') }}">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('published_at').value = ''">
+                                                Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="#" class="small font-weight-bold text-primary" onclick="setNow(event)">Publish Immediately</a>
+                                    </div>
+                                    <small class="form-text text-muted mt-1">Leave blank to save as Draft.</small>
+                                </div>
+
+                                <hr>
+
+                                {{-- Featured Image Upload --}}
+                                <div class="mb-4">
+                                    <label class="form-label font-weight-bold">Featured Image (Upload)</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="featured_image" name="featured_image"
+                                               onchange="document.getElementById('file-label').textContent = this.files[0] ? this.files[0].name : 'Choose file'">
+                                        <label class="custom-file-label" id="file-label" for="featured_image">Choose file</label>
+                                    </div>
+                                    
+                                     @if($post->featured_image)
+                                        <div class="mt-3 p-2 border rounded bg-light">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ Storage::url($post->featured_image) }}" class="mr-3 rounded shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                                                <div>
+                                                    <small class="text-muted d-block mb-1 font-weight-bold">Current Image</small>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="remove_featured_image" name="remove_featured_image" value="1">
+                                                        <label class="form-check-label text-danger small" for="remove_featured_image">
+                                                            Remove this image
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <small class="form-text text-muted mt-2 d-block">
+                                        <i class="fas fa-info-circle mr-1"></i> Overrides any selected gallery photo.
+                                    </small>
+                                </div>
+
+                                <div class="alert alert-info small">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Last updated: {{ $post->updated_at->diffForHumans() }}
+                                </div>
+
+                                <hr>
+                                
+                                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                                    <i class="fas fa-save mr-2"></i> Update Post
+                                </button>
+                                <a href="{{ route('admin.posts.index') }}" class="btn btn-light btn-block text-secondary border">
+                                    Cancel
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <a href="{{ route('admin.posts.index') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Update Post</button>
             </form>
             {{-- FORM ENDS HERE --}}
         </div>

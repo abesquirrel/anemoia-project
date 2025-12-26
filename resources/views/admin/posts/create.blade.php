@@ -35,96 +35,127 @@
 
             <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
-                <div class="mb-3">
-                    <label for="title" class="form-label font-weight-bold">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
-                </div>
-
-                {{-- 1. GALLERY SELECTOR --}}
-                <div class="mb-3">
-                    <label for="gallery_id" class="form-label font-weight-bold">Link a Gallery (Optional)</label>
-                    <select class="form-control" id="gallery_id" name="gallery_id">
-                        <option value="">-- No Gallery --</option>
-                        @foreach($galleries as $gallery)
-                            <option value="{{ $gallery->id }}" {{ old('gallery_id') == $gallery->id ? 'selected' : '' }}>
-                                {{ $gallery->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <small class="text-muted">Selecting a gallery enables the photo selector below.</small>
-                </div>
-
-                {{-- 2. VISUAL PHOTO SELECTOR --}}
-                <div class="mb-4 p-3 border rounded bg-light">
-                    <label class="form-label font-weight-bold">Cover Photo (From Selected Album)</label>
-
-                    <input type="hidden" id="cover_photo_id" name="cover_photo_id" value="{{ old('cover_photo_id') }}">
-
-                    <div class="d-flex align-items-center">
-                        {{-- Preview Box --}}
-                        <div id="main-preview-container" class="border rounded bg-white d-flex align-items-center justify-content-center shadow-sm position-relative"
-                             style="width: 150px; height: 100px; overflow: hidden; flex-shrink: 0;">
-                            <img id="main-preview-img" src="" class="d-none w-100 h-100" style="object-fit: cover;">
-                            <span id="main-preview-placeholder" class="text-muted small text-center px-2">No Photo Selected</span>
-                            <button type="button" id="clear-selection-btn" class="btn btn-sm btn-danger position-absolute top-0 right-0 m-1 p-0 d-none"
-                                    style="width: 20px; height: 20px; line-height: 1;" title="Remove Selection">&times;</button>
-                        </div>
-
-                        {{-- Trigger Button --}}
-                        <div class="ml-4"> {{-- Spacing fix --}}
-                            <button type="button" class="btn btn-outline-primary" id="open-photo-modal" disabled>
-                                <i class="fas fa-images me-2"></i> Browse Album Photos
-                            </button>
-                            <div class="form-text text-muted mt-1" id="gallery-hint">
-                                Select a gallery above to enable this.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="body" class="form-label font-weight-bold">Body</label>
-                    <textarea class="form-control" id="body" name="body" rows="10" required>{{ old('body') }}</textarea>
-                </div>
-
                 <div class="row">
-                    {{-- Featured Image --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label font-weight-bold">Featured Image (Custom Upload)</label>
+                    {{-- LEFT COLUMN: Content --}}
+                    <div class="col-lg-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Post Content</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label font-weight-bold">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" placeholder="Enter a catchy title..." required>
+                                </div>
 
-                        <div class="d-flex align-items-center">
-                            <label class="btn btn-outline-secondary mb-0" for="featured_image">
-                                <i class="fas fa-upload me-2"></i> Choose File
-                            </label>
-                            <input type="file" class="d-none" id="featured_image" name="featured_image"
-                                   onchange="document.getElementById('file-name-display').textContent = this.files[0] ? this.files[0].name : 'No file chosen'">
-                            <span id="file-name-display" class="ml-3 text-muted font-italic">No file chosen</span>
-                        </div>
-
-                        <small class="form-text text-muted mt-2 d-block">Overrides the selected Album Photo.</small>
-                    </div>
-
-                    {{-- Publish Date --}}
-                    <div class="col-md-6 mb-3">
-                        <label for="published_at" class="form-label font-weight-bold">Publish Date</label>
-                        <div class="input-group">
-                            <input type="datetime-local" class="form-control" id="published_at" name="published_at"
-                                   value="{{ old('published_at') }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('published_at').value = ''">
-                                    Clear
-                                </button>
+                                <div class="mb-3">
+                                    <label for="body" class="form-label font-weight-bold">Content Body</label>
+                                    <textarea class="form-control" id="body" name="body" rows="15" placeholder="Write your story here..." required>{{ old('body') }}</textarea>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-text text-muted mt-1">
-                            <a href="#" class="text-decoration-none" onclick="setNow(event)">Click here to set to NOW (Publish Immediately)</a>
+
+                        {{-- Link to Gallery --}}
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Gallery Association</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="gallery_id" class="form-label font-weight-bold">Link a Gallery (Optional)</label>
+                                    <select class="form-control" id="gallery_id" name="gallery_id">
+                                        <option value="">-- No Gallery --</option>
+                                        @foreach($galleries as $gallery)
+                                            <option value="{{ $gallery->id }}" {{ old('gallery_id') == $gallery->id ? 'selected' : '' }}>
+                                                {{ $gallery->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted">Linking a gallery allows you to select a cover photo from that gallery below.</small>
+                                </div>
+
+                                {{-- VISUAL PHOTO SELECTOR --}}
+                                <div class="p-3 border rounded bg-light mt-3">
+                                    <label class="form-label font-weight-bold small text-uppercase text-muted mb-3">Cover Photo Selection</label>
+                                    <div class="d-flex align-items-center flex-wrap">
+                                         <input type="hidden" id="cover_photo_id" name="cover_photo_id" value="{{ old('cover_photo_id') }}">
+
+                                        {{-- Preview Box --}}
+                                        <div id="main-preview-container" class="border rounded bg-white d-flex align-items-center justify-content-center shadow-sm position-relative mr-3 mb-2"
+                                             style="width: 120px; height: 120px; overflow: hidden; flex-shrink: 0;">
+                                            <img id="main-preview-img" src="" class="d-none w-100 h-100" style="object-fit: cover;">
+                                            <span id="main-preview-placeholder" class="text-muted small text-center px-2">No Photo<br>Selected</span>
+                                            <button type="button" id="clear-selection-btn" class="btn btn-sm btn-danger position-absolute top-0 right-0 m-1 p-0 d-none"
+                                                    style="width: 20px; height: 20px; line-height: 1;" title="Remove Selection">&times;</button>
+                                        </div>
+
+                                        {{-- Trigger Button --}}
+                                        <div class="flex-grow-1">
+                                            <button type="button" class="btn btn-outline-primary btn-block mb-2" id="open-photo-modal" disabled>
+                                                <i class="fas fa-images mr-2"></i> Browse Gallery Photos
+                                            </button>
+                                            <div class="small text-muted font-italic" id="gallery-hint">
+                                                Select a gallery above to enable.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- RIGHT COLUMN: Meta Data --}}
+                    <div class="col-lg-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Publishing & Media</h6>
+                            </div>
+                            <div class="card-body">
+                                {{-- Publish Date --}}
+                                <div class="mb-4">
+                                    <label for="published_at" class="form-label font-weight-bold">Publish Date</label>
+                                    <div class="input-group">
+                                        <input type="datetime-local" class="form-control" id="published_at" name="published_at"
+                                               value="{{ old('published_at') }}">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('published_at').value = ''">
+                                                Clear
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="#" class="small font-weight-bold text-primary" onclick="setNow(event)">Publish Immediately</a>
+                                    </div>
+                                    <small class="form-text text-muted mt-1">Leave blank to save as Draft.</small>
+                                </div>
+
+                                <hr>
+
+                                {{-- Featured Image Upload --}}
+                                <div class="mb-4">
+                                    <label class="form-label font-weight-bold">Featured Image (Upload)</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="featured_image" name="featured_image"
+                                               onchange="document.getElementById('file-label').textContent = this.files[0] ? this.files[0].name : 'Choose file'">
+                                        <label class="custom-file-label" id="file-label" for="featured_image">Choose file</label>
+                                    </div>
+                                    <small class="form-text text-muted mt-2">
+                                        <i class="fas fa-info-circle mr-1"></i> Overrides any selected gallery photo.
+                                    </small>
+                                </div>
+
+                                <hr>
+                                
+                                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                                    <i class="fas fa-paper-plane mr-2"></i> Create Post
+                                </button>
+                                <a href="{{ route('admin.posts.index') }}" class="btn btn-light btn-block text-secondary border">
+                                    Cancel
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <a href="{{ route('admin.posts.index') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Create Post</button>
             </form>
         </div>
     </div>

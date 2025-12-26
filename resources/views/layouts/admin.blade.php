@@ -11,86 +11,16 @@
         <link href="{{ asset('admin_assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link href="{{ asset('admin_assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('admin_assets/css/custom.css') }}" rel="stylesheet">
 
         <style>
-            /* Scrollbar Hiding */
-            /* Chrome, Safari and Opera */
-            ::-webkit-scrollbar {
-                display: none;
-            }
-            /* IE and Edge */
+            /* Specific fix for scrollbar hiding (browser specific) can stay here or move to custom.css if preferred.
+               Keeping here for clarity as it's a specific utility. */
+            ::-webkit-scrollbar { display: none; }
             -ms-overflow-style: none;
-            /* Firefox */
             scrollbar-width: none;
-
-            :root {
-                --bs-primary: #64a19d;
-                --bs-primary-rgb: 100, 161, 157;
-                --bs-link-color: #64a19d;
-                --bs-link-hover-color: #51827e;
-            }
-            .btn-primary {
-                --bs-btn-bg: #64a19d;
-                --bs-btn-border-color: #64a19d;
-                --bs-btn-hover-bg: #51827e;
-                --bs-btn-hover-border-color: #51827e;
-                --bs-btn-active-bg: #51827e;
-                --bs-btn-active-border-color: #51827e;
-                --bs-btn-disabled-bg: #64a19d;
-                --bs-btn-disabled-border-color: #64a19d;
-            }
-            .btn-secondary {
-                --bs-btn-color: #fff;
-                --bs-btn-bg: #212529;
-                --bs-btn-border-color: #212529;
-                --bs-btn-hover-color: #fff;
-                --bs-btn-hover-bg: #424649;
-                --bs-btn-hover-border-color: #373b3e;
-            }
-            .btn-info {
-                --bs-btn-color: #000;
-                --bs-btn-bg: #adb5bd;
-                --bs-btn-border-color: #adb5bd;
-                --bs-btn-hover-bg: #ced4da;
-                --bs-btn-hover-border-color: #ced4da;
-            }
-            #accordionSidebar {
-                background-image: none;
-                background-color: #212529 !important; /* Lighter charcoal */
-            }
-            .sidebar-brand {
-                color: #fff !important;
-            }
-            .sidebar .nav-link {
-                color: rgba(255, 255, 255, 0.5);
-            }
-            .sidebar .nav-link:hover {
-                color: rgba(255, 255, 255, 0.75);
-            }
-            .sidebar .nav-item.active .nav-link {
-                color: #fff;
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-            .sidebar .sidebar-heading {
-                color: rgba(255, 255, 255, 0.3);
-            }
-            .sidebar-divider {
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            /* Improved Mobile Spacing */
-            @media (max-width: 768px) {
-                .container-fluid {
-                    padding-left: 1rem;
-                    padding-right: 1rem;
-                }
-                .card-header {
-                    padding: 0.75rem 1rem;
-                }
-                .btn-sm {
-                   padding: 0.375rem 0.75rem; /* Larger touch target */
-                }
-            }
+            
+            /* Clean up: Removed inline overrides for colors/buttons as they are now in custom.css */
         </style>
     </head>
     <body id="page-top">
@@ -117,51 +47,89 @@
                     <i class="fas fa-fw fa-pen-square"></i>
                     <span>Blog</span></a>
             </li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">System</div>
+            <li class="nav-item {{ request()->routeIs('admin.activity_log.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.activity_log.index') }}">
+                    <i class="fas fa-fw fa-list"></i>
+                    <span>Activity Log</span></a>
+            </li>
             <hr class="sidebar-divider d-none d-md-block">
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
         </ul>
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                                <span class="nav-link text-gray-600 small">
-                                    {{ Auth::user()->name }}
-                                </span>
-                        </li>
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('profile.edit') }}">
-                                <i class="fas fa-user fa-sm fa-fw me-3 text-gray-400"></i>
-                                Profile
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                <img class="img-profile rounded-circle"
+                                     src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random">
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-cogs fa-sm fa-fw me-3 text-gray-400"></i>
-                                Settings
-                            </a>
-                        </li>
-                        <li class="nav-item {{ request()->routeIs('admin.activity_log.*') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('admin.activity_log.index') }}">
-                                <i class="fas fa-fw fa-list"></i>
-                                <span>Activity Log</span></a>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw me-3 text-gray-400"></i>
-                                Logout
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
                         </li>
                     </ul>
                 </nav>
                 <div class="container-fluid">
                     @yield('content')
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>

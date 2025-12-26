@@ -1,0 +1,197 @@
+/* Custom Theme Overrides for Anemoia Admin */
+
+/* 1. Typography - Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif !important;
+    color: #4a5568;
+    /* Slate-700 */
+    background-color: #f8fafc;
+    /* Slate-50 */
+}
+
+/* 2. Brand Colors (Teal & Slate) */
+:root {
+    --primary-teal: #64a19d;
+    /* Anemoia Brand Color */
+    --primary-dark: #51827e;
+    --secondary-slate: #2d3748;
+    --bg-light: #f8fafc;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Override Text & Background Utilities */
+.text-primary {
+    color: var(--primary-teal) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-teal) !important;
+}
+
+/* 3. Sidebar Modernization */
+#accordionSidebar {
+    background: #1a202c;
+    /* Slate-900 solid instead of gradient */
+    background-image: none;
+    border-right: 1px solid #2d3748;
+}
+
+.sidebar .nav-item .nav-link {
+    color: #a0aec0;
+    /* Slate-400 */
+    font-weight: 500;
+}
+
+.sidebar .nav-item.active .nav-link {
+    color: #fff;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-left: 4px solid var(--primary-teal);
+    padding-left: 0.75rem;
+    /* Compensate for border */
+}
+
+/* 4. Cards & Containers */
+.card {
+    border: none;
+    border-radius: 0.75rem;
+    /* More rounded */
+    box-shadow: var(--card-shadow) !important;
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #edf2f7;
+    font-weight: 600;
+    color: #2d3748;
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+}
+
+/* 5. Buttons */
+.btn-primary {
+    background-color: var(--primary-teal);
+    border-color: var(--primary-teal);
+    box-shadow: 0 4px 6px rgba(100, 161, 157, 0.25);
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.btn-circle {
+    border-radius: 50%;
+}
+
+/* 6. Topbar */
+.topbar {
+    background-color: #fff !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* 7. Tables */
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #718096;
+    background-color: #f7fafc;
+    border-top: none;
+}
+
+.table td {
+    vertical-align: middle;
+    color: #4a5568;
+}
+
+/* 8. Activity Log Timeline */
+.timeline {
+    position: relative;
+    padding: 1rem 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 2px;
+    background: #e2e8f0;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 50px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    color: #a0aec0;
+}
+
+.timeline-marker.success {
+    border-color: #48bb78;
+    color: #48bb78;
+    background: #f0fff4;
+}
+
+.timeline-marker.danger {
+    border-color: #f56565;
+    color: #f56565;
+    background: #fff5f5;
+}
+
+.timeline-marker.info {
+    border-color: #4299e1;
+    color: #4299e1;
+    background: #ebf8ff;
+}
+
+.timeline-marker.warning {
+    border-color: #ed8936;
+    color: #ed8936;
+    background: #fffaf0;
+}
+
+.timeline-content .card {
+    margin-bottom: 0;
+    border-left: 4px solid transparent;
+}
+
+.timeline-content .card.success {
+    border-left-color: #48bb78;
+}
+
+.timeline-content .card.danger {
+    border-left-color: #f56565;
+}
+
+.timeline-content .card.info {
+    border-left-color: #4299e1;
+}
+
+.timeline-content .card.warning {
+    border-left-color: #ed8936;
+}
