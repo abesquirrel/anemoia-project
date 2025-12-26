@@ -76,10 +76,57 @@
         loop: true,
         touchNavigation: true
     });
+
+    // GLightbox Analytics
+    if (typeof lightbox !== 'undefined') {
+        lightbox.on('open', () => {
+            gtag('event', 'lightbox_open', {
+                'event_category': 'gallery',
+                'event_label': 'Lightbox Opened'
+            });
+        });
+
+        lightbox.on('slide_changed', ({ prev, current }) => {
+            gtag('event', 'lightbox_slide', {
+                'event_category': 'gallery',
+                'event_label': 'Slide Changed'
+            });
+        });
+    }
+
     // Auto-update Copyright Year
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
 </script>
 <script>
+    // General Analytics Tracking (Scroll & Clicks)
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Scroll Depth Tracking
+        let scrollDepths = { 25: false, 50: false, 75: false, 90: false };
+
+        const trackScroll = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.offsetHeight;
+            const winHeight = window.innerHeight;
+
+            if (docHeight <= winHeight) return; // Not enough content to scroll
+
+            const scrollPercent = Math.round((scrollTop / (docHeight - winHeight)) * 100);
+
+            for (let depth in scrollDepths) {
+                if (!scrollDepths[depth] && scrollPercent >= depth) {
+                    scrollDepths[depth] = true;
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'engagement',
+                        'event_label': depth + '%',
+                        'value': parseInt(depth)
+                    });
+                }
+            }
+        };
+
+        document.addEventListener('scroll', trackScroll);
+    });
+
     document.addEventListener('click', function(e) {
         let target = e.target.closest('a');
 
@@ -87,18 +134,40 @@
         if (target) {
             let linkUrl = target.getAttribute('href');
 
-            if (linkUrl && !linkUrl.startsWith('#') && !linkUrl.startsWith('javascript')) {
-                fetch('{{ route('log.event') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel security token
-                    },
-                    body: JSON.stringify({
-                        type: 'click',
-                        message: 'User clicked link: ' + linkUrl
-                    })
-                });
+            if (linkUrl) {
+                // 2. Outbound & Contact Link Tracking
+                if (linkUrl.startsWith('mailto:')) {
+                    gtag('event', 'contact_click', {
+                        'event_category': 'contact',
+                        'event_label': 'Email: ' + linkUrl.replace('mailto:', '')
+                    });
+                } else if (linkUrl.startsWith('tel:')) {
+                     gtag('event', 'contact_click', {
+                        'event_category': 'contact',
+                        'event_label': 'Phone: ' + linkUrl.replace('tel:', '')
+                    });
+                } else if (linkUrl.startsWith('http') && !linkUrl.includes(window.location.hostname)) {
+                    gtag('event', 'outbound_click', {
+                        'event_category': 'outbound',
+                        'event_label': linkUrl,
+                        'transport_type': 'beacon'
+                    });
+                }
+
+                // Existing Internal Logging
+                if (!linkUrl.startsWith('#') && !linkUrl.startsWith('javascript')) {
+                    fetch('{{ route('log.event') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel security token
+                        },
+                        body: JSON.stringify({
+                            type: 'click',
+                            message: 'User clicked link: ' + linkUrl
+                        })
+                    });
+                }
             }
         }
     });
