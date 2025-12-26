@@ -40,6 +40,9 @@ Route::middleware('auth')->group(function () {
     // ### ADMIN-ONLY ROUTES ###
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
+        // 0. Dashboard
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard'); // Separate Admin Dashboard
+
         // 1. Gallery Management (CRUD)
         Route::resource('galleries', AdminGalleryController::class);
 
@@ -56,9 +59,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('photos/{photo}/set-cover', [AdminPhotoController::class, 'setCover'])->name('photos.setCover');
         Route::patch('photos/{photo}/toggle-visibility', [AdminPhotoController::class, 'toggleVisibility'])->name('photos.toggleVisibility');
 
-        // 5. Blog Management
-        Route::resource('posts', AdminPostController::class);
-
         // 6. Ajax Request for Gallery Photos
         Route::get('galleries/{gallery}/get-photos', [AdminPostController::class, 'getGalleryPhotos'])->name('galleries.getPhotos');
 
@@ -67,6 +67,14 @@ Route::middleware('auth')->group(function () {
 
         // 8. User Management
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class); // Manually registered for clarity
+    });
+
+    // ### SHARED ADMIN/EDITOR ROUTES ###
+    // These routes are prefixed with 'admin' but NOT protected by 'admin' middleware
+    // We handle specific permissions (like create/delete) in the Controller
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // 5. Blog Management
+        Route::resource('posts', AdminPostController::class);
     });
 });
 

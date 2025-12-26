@@ -28,6 +28,11 @@ class PostController extends Controller
      */
     public function create()
     {
+        // Enforce Admin Only for Creation
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('admin.posts.index')->with('error', 'Only Administrators can create new posts.');
+        }
+
         $galleries = Gallery::all();
         return view('admin.posts.create', compact('galleries'));
     }
@@ -37,6 +42,11 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // Enforce Admin Only for Creation
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('admin.posts.index')->with('error', 'Only Administrators can create new posts.');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'gallery_id' => 'nullable|exists:galleries,id',
@@ -69,7 +79,8 @@ class PostController extends Controller
             'slug' => Str::slug($validated['title']),
             'body' => $validated['body'],
             'featured_image' => $path,
-            'published_at' => $validated['published_at'] ?? now()
+            'published_at' => $validated['published_at'] ?? now(),
+            'last_edited_by' => Auth::id() // Track initial creator as editor too
         ]);
 
         EventLog::create([
@@ -97,7 +108,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $galleries = Gallery::all();
-        return view('admin.posts.edit', compact('post','galleries'));
+        return view('admin.posts.edit', compact('post', 'galleries'));
     }
 
     /**
@@ -151,7 +162,9 @@ class PostController extends Controller
             'cover_photo_id' => $request->input('cover_photo_id') ?: null,
             'body' => $validated['body'],
             'featured_image' => $path,
+            'featured_image' => $path,
             'published_at' => $validated['published_at'],
+            'last_edited_by' => Auth::id() // Track the editor
         ]);
 
         EventLog::create([
@@ -170,6 +183,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post) // Corrected type hint to Post model
     {
+        // Enforce Admin Only for Deletion
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('admin.posts.index')->with('error', 'Only Administrators can delete posts.');
+        }
         // Delete the featured image from storage if it exists
         if ($post->featured_image) {
             Storage::disk('public')->delete($post->featured_image);
@@ -197,7 +214,7 @@ class PostController extends Controller
         $photos = $gallery->photos()
             ->where('is_visible', true)
             ->get()
-            ->map(function($photo) {
+            ->map(function ($photo) {
                 return [
                     'id' => $photo->id,
                     'url' => $photo->url,

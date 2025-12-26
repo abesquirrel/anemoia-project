@@ -30,10 +30,16 @@
                 <div class="sidebar-brand-text mx-3">Anem[o]ia</div>
             </a>
             <hr class="sidebar-divider my-0">
-            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('dashboard') }}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+            <li class="nav-item {{ request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                @if(auth()->user()->is_admin)
+                    <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Admin Dashboard</span></a>
+                @else
+                    <a class="nav-link" href="{{ route('dashboard') }}">
+                        <i class="fas fa-fw fa-home"></i>
+                        <span>Home Dashboard</span></a>
+                @endif
             </li>
             <hr class="sidebar-divider">
             <div class="sidebar-heading">Content</div>
@@ -61,6 +67,21 @@
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
             </li>
+
+            <hr class="sidebar-divider">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('home') }}" target="_blank">
+                    <i class="fas fa-fw fa-external-link-alt"></i>
+                    <span>View Website</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>Logout</span></a>
+            </li>
+
             <hr class="sidebar-divider d-none d-md-block">
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">

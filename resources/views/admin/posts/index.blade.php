@@ -1,124 +1,175 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Manage Blog Posts</h1>
-        <a href="{{ route('admin.posts.create') }}" class="btn btn-primary btn-sm">
-            + New Post
-        </a>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Blog Posts</h1>
+        @if(auth()->user()->is_admin)
+            <a href="{{ route('admin.posts.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-plus fa-sm text-white-50 mr-2"></i>New Post
+            </a>
+        @else
+            <div class="card bg-info text-white shadow-sm">
+                <div class="card-body py-2 px-3">
+                    <i class="fas fa-user-edit mr-2"></i> 
+                    <strong>Editor Mode Protected:</strong> You can edit existing posts, but cannot create or delete them.
+                </div>
+            </div>
+        @endif
     </div>
 
-    <div class="card shadow mb-4">
-        <div class="card-body">
-            @if (session('success'))
-                <div class="alert alert-success mb-3">{{ session('success') }}</div>
-            @endif
+    {{-- Error/Success Alerts --}}
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle mr-2"></i> {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
-            <div class="table-responsive d-none d-md-block">
-                <table class="table table-hover align-middle">
-                    <thead class="bg-light">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    {{-- DESKTOP VIEW --}}
+    <div class="card shadow mb-4 d-none d-md-block">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">All Posts</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
                     <tr>
-                        <th style="width: 100px;">Cover</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                        <th style="width: 15%;">Actions</th>
+                        <th width="5%">ID</th>
+                        <th width="10%">Image</th>
+                        <th width="30%">Title</th>
+                        <th width="15%">Author</th>
+                        <th width="15%">Last Editor</th>
+                        <th width="10%">Status</th>
+                        <th width="15%">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse ($posts as $post)
-                        @php
-                            $coverUrl = $post->featured_image ? Storage::url($post->featured_image) : ($post->coverPhoto ? Storage::url($post->coverPhoto->filename) : null);
-                        @endphp
+                    @forelse($posts as $post)
                         <tr>
+                            <td>{{ $post->id }}</td>
                             <td>
-                                <div class="rounded overflow-hidden shadow-sm bg-light d-flex align-items-center justify-content-center" style="width: 80px; height: 60px;">
-                                    @if($coverUrl)
-                                        <img src="{{ $coverUrl }}" alt="{{ $post->title }}" class="w-100 h-100" style="object-fit: cover;">
-                                    @else
-                                        <i class="fas fa-newspaper text-gray-400 fa-lg"></i>
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="font-weight-bold text-dark">{{ $post->title }}</td>
-                            <td>{{ $post->user->name }}</td>
-                            <td>
-                                @if($post->published_at && $post->published_at <= now())
-                                    <span class="badge badge-pill badge-success px-2">Published</span>
+                                @if($post->featured_image)
+                                    <img src="{{ Storage::url($post->featured_image) }}" alt="Thumbnail" class="img-fluid rounded" style="max-height: 50px;">
                                 @else
-                                    <span class="badge badge-pill badge-secondary px-2">Draft</span>
+                                    <div class="bg-gray-200 text-gray-400 rounded d-flex align-items-center justify-content-center" style="height: 50px; width: 50px;">
+                                        <i class="fas fa-image"></i>
+                                    </div>
                                 @endif
                             </td>
-                            <td>{{ $post->created_at->format('Y-m-d') }}</td>
                             <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-outline-warning" title="Edit"><i class="fas fa-edit"></i></a>
-                                    <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
+                                <a href="{{ route('admin.posts.edit', $post) }}" class="font-weight-bold text-primary">
+                                    {{ $post->title }}
+                                </a>
+                                <div class="small text-muted">{{ Str::limit($post->body, 50) }}</div>
+                            </td>
+                            <td>
+                                {{ $post->user->name }}
+                            </td>
+                            <td>
+                                @if($post->editor)
+                                    <span class="badge badge-light border">
+                                        {{ $post->editor->name }}
+                                    </span>
+                                    <div class="text-xs text-muted">{{ $post->updated_at->diffForHumans() }}</div>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($post->published_at && $post->published_at <= now())
+                                    <span class="badge badge-success">Published</span>
+                                @elseif($post->published_at && $post->published_at > now())
+                                    <span class="badge badge-warning">Scheduled</span>
+                                @else
+                                    <span class="badge badge-secondary">Draft</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-sm btn-info btn-circle" title="Edit">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                                @if(auth()->user()->is_admin)
+                                    <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn btn-sm btn-danger btn-circle" onclick="return confirm('Are you sure?')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
-                                </div>
+                                @else
+                                    <button class="btn btn-sm btn-secondary btn-circle" title="Admins Only" disabled>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-4">No posts found. Create one!</td>
+                            <td colspan="7" class="text-center text-muted">No posts found.</td>
                         </tr>
                     @endforelse
                     </tbody>
                 </table>
             </div>
-
-            {{-- Mobile Card View (< md) --}}
-            <div class="d-md-none">
-                @forelse ($posts as $post)
-                    @php
-                        $coverUrl = $post->featured_image ? Storage::url($post->featured_image) : ($post->coverPhoto ? Storage::url($post->coverPhoto->filename) : null);
-                    @endphp
-                    <div class="card mb-4 overflow-hidden border-0 shadow">
-                         @if($coverUrl)
-                            <div style="height: 160px; overflow: hidden; position: relative;">
-                                <img src="{{ $coverUrl }}" class="w-100" style="position: absolute; top: 50%; transform: translateY(-50%); width: 100%; min-height: 100%; object-fit: cover;">
-                                <div class="position-absolute bottom-0 w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
-                                     <h5 class="text-white font-weight-bold mb-0">{{ $post->title }}</h5>
-                                </div>
-                            </div>
-                        @endif
-                        <div class="card-body">
-                             @if(!$coverUrl)
-                                <h5 class="card-title font-weight-bold text-primary">{{ $post->title }}</h5>
-                             @endif
-                            <div class="d-flex justify-content-between mb-3">
-                                <div>
-                                    @if($post->published_at && $post->published_at <= now())
-                                        <span class="badge badge-success">Published</span>
-                                    @else
-                                        <span class="badge badge-secondary">Draft</span>
-                                    @endif
-                                </div>
-                                <span class="text-muted small">By {{ $post->user->name }}</span>
-                            </div>
-                            <p class="card-text small text-muted mb-3">
-                                Created on {{ $post->created_at->format('M d, Y') }}
-                            </p>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-outline-warning w-100">Edit <i class="fas fa-edit ml-1"></i></a>
-                                <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline flex-grow-1" onsubmit="return confirm('Are you sure?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="w-100 btn btn-outline-danger">Delete <i class="fas fa-trash ml-1"></i></button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="text-center p-3">
-                        <p class="text-muted">No posts found. Create one!</p>
-                    </div>
-                @endforelse
-            </div>
         </div>
     </div>
+
+    {{-- MOBILE VIEW Cards --}}
+    <div class="d-md-none">
+        @foreach($posts as $post)
+            <div class="card shadow mb-3">
+                 @if($post->featured_image)
+                    <div style="height: 150px; overflow: hidden; border-radius: 0.75rem 0.75rem 0 0;">
+                         <img src="{{ Storage::url($post->featured_image) }}" class="w-100" style="object-fit: cover; height: 100%;">
+                    </div>
+                @endif
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        @if($post->published_at && $post->published_at <= now())
+                            <span class="badge badge-success">Published</span>
+                        @else
+                            <span class="badge badge-secondary">Draft</span>
+                        @endif
+                         <small class="text-muted">{{ $post->updated_at->format('M d, Y') }}</small>
+                    </div>
+                    
+                    <h5 class="font-weight-bold text-gray-900 mb-1">{{ $post->title }}</h5>
+                    <p class="small text-gray-600 mb-3">
+                         By {{ $post->user->name }}
+                        @if($post->editor)
+                             <br><span class="text-xs text-muted">Edited by {{ $post->editor->name }}</span>
+                        @endif
+                    </p>
+
+                    <div class="d-flex justify-content-end">
+                         <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-info btn-sm mr-2">
+                            <i class="fas fa-pen mr-1"></i> Edit
+                        </a>
+                        @if(auth()->user()->is_admin)
+                            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this post?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
 @endsection
