@@ -152,23 +152,75 @@ footer.sticky-footer {
     font-family: 'Playfair Display', serif !important;
 }
 
-/* 7. Buttons */
+/* 7. Buttons (Minimalist / Noir Style) */
+/* Primary Action Button (Solid but muted) */
 .btn-primary {
     background-color: var(--accent-primary) !important;
     border-color: var(--accent-primary) !important;
     color: #fff !important;
+    box-shadow: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
     background-color: var(--accent-hover) !important;
     border-color: var(--accent-hover) !important;
+    transform: translateY(-1px);
 }
 
+/* Secondary / Light Buttons (Ghost) */
 .btn-light {
-    background-color: var(--bg-hover);
-    border-color: var(--border-color);
+    background: transparent;
+    border: 1px solid var(--border-color);
     color: var(--text-main);
 }
+
+/* Action Circle Buttons (Edit, Delete) - Minimalist Ghost Style */
+.btn-circle.btn-sm {
+    width: 32px;
+    height: 32px;
+    line-height: 28px;
+    /* Vertically center icon */
+    padding: 0;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    /* Default muted */
+    transition: all 0.2s ease;
+}
+
+/* Hover States for Ghost Buttons */
+.btn-circle.btn-info:hover {
+    background: rgba(54, 185, 204, 0.1);
+    /* Subtle Blue Tint */
+    color: #36b9cc;
+    border-color: #36b9cc;
+}
+
+.btn-circle.btn-danger:hover {
+    background: rgba(231, 74, 59, 0.1);
+    /* Subtle Red Tint */
+    color: #e74a3b;
+    border-color: #e74a3b;
+}
+
+.btn-circle.btn-warning:hover {
+    background: rgba(246, 194, 62, 0.1);
+    color: #f6c23e;
+    border-color: #f6c23e;
+}
+
+/* Standard Buttons (Non-Circle) - Minimalist Outline */
+.btn-outline-primary,
+.btn-outline-danger,
+.btn-outline-info {
+    border-width: 1px;
+    font-weight: 500;
+}
+
 
 /* 8. Topbar */
 .topbar {

@@ -48,16 +48,18 @@
                             </td>
                             <td>{{ $user->created_at->format('M d, Y') }}</td>
                             <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-outline-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-info btn-circle" title="Edit">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
                                     @if(auth()->id() !== $user->id)
-                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? This cannot be undone.')">
+                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn btn-sm btn-danger btn-circle" onclick="return confirm('Are you sure? This cannot be undone.')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                     @endif
-                                </div>
                             </td>
                         </tr>
                     @empty
