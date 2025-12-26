@@ -45,28 +45,38 @@
                                             <td>{{ $gallery->photos_count }}</td>
                                             <td>{{ $gallery->created_at->format('Y-m-d') }}</td>
                                             <td>
-                                                <div class="btn-group btn-group-sm">
-                                                    <a href="{{ route('admin.photos.index', $gallery) }}" class="btn btn-outline-info" title="Photos"><i class="fas fa-images"></i></a>
-                                                    <a href="{{ route('admin.galleries.edit', $gallery) }}" class="btn btn-outline-primary" title="Edit"><i class="fas fa-edit"></i></a>
+                                                <div class="d-flex align-items-center">
+                                                    <a href="{{ route('admin.photos.index', $gallery) }}" class="btn btn-sm btn-info btn-circle mr-1" title="Manage Photos">
+                                                        <i class="fas fa-images"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.galleries.edit', $gallery) }}" class="btn btn-sm btn-primary btn-circle mr-1" title="Edit Gallery">
+                                                        <i class="fas fa-pen"></i>
+                                                    </a>
                                                     
                                                     @if($gallery->featured_at)
-                                                        <form action="{{ route('admin.galleries.unfeature', $gallery) }}" method="POST" class="d-inline">
+                                                        <form action="{{ route('admin.galleries.unfeature', $gallery) }}" method="POST" class="d-inline mr-1">
                                                             @csrf
                                                             @method('PATCH')
-                                                            <button type="submit" class="btn btn-outline-warning" title="Unfeature"><i class="fas fa-star"></i></button>
+                                                            <button type="submit" class="btn btn-sm btn-warning btn-circle" title="Unfeature">
+                                                                <i class="fas fa-star"></i>
+                                                            </button>
                                                         </form>
                                                     @else
-                                                        <form action="{{ route('admin.galleries.feature', $gallery) }}" method="POST" class="d-inline">
+                                                        <form action="{{ route('admin.galleries.feature', $gallery) }}" method="POST" class="d-inline mr-1">
                                                             @csrf
                                                             @method('PATCH')
-                                                            <button type="submit" class="btn btn-outline-secondary" title="Feature"><i class="far fa-star"></i></button>
+                                                            <button type="submit" class="btn btn-sm btn-secondary btn-circle" title="Feature">
+                                                                <i class="far fa-star"></i>
+                                                            </button>
                                                         </form>
                                                     @endif
                                                     
                                                     <form action="{{ route('admin.galleries.destroy', $gallery) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                                                        <button type="submit" class="btn btn-sm btn-danger btn-circle" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
                                                     </form>
                                                 </div>
                                             </td>
