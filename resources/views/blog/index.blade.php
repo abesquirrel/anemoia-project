@@ -201,4 +201,33 @@
 
         </div>
     </section>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof gtag === 'function') {
+                gtag('event', 'view_item_list', {
+                    "item_list_id": "journal",
+                    "item_list_name": "Journal Entries",
+                    "items": [
+                        @if($heroPost)
+                        {
+                            "item_id": "{{ $heroPost->id }}",
+                            "item_name": "{{ $heroPost->title }}",
+                            "index": 1
+                        },
+                        @endif
+                        @foreach ($gridPosts as $index => $post)
+                        {
+                            "item_id": "{{ $post->id }}",
+                            "item_name": "{{ $post->title }}",
+                            "index": {{ $index + 2 }}
+                        },
+                        @endforeach
+                    ]
+                });
+            }
+        });
+    </script>
+@endpush
 @endsection

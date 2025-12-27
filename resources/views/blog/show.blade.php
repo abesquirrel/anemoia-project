@@ -184,4 +184,23 @@
 
         </div>
     </section>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof gtag === 'function') {
+                gtag('event', 'view_item', {
+                    "items": [
+                        {
+                            "item_id": "{{ $post->id }}",
+                            "item_name": "{{ $post->title }}",
+                            "item_category": "Blog Post",
+                            "author": "{{ $post->user ? $post->user->name : 'Anemoia' }}"
+                        }
+                    ]
+                });
+            }
+        });
+    </script>
+@endpush
 @endsection
