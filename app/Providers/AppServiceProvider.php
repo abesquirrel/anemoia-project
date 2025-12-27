@@ -28,8 +28,10 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\User::observe(\App\Observers\UserObserver::class);
 
         // Register Auth Listeners
-        Event::listen(\Illuminate\Auth\Events\Login::class, \App\Listeners\LogSuccessfulLogin::class);
-        Event::listen(\Illuminate\Auth\Events\Logout::class, \App\Listeners\LogLogout::class);
-        Event::listen(\Illuminate\Auth\Events\Registered::class, \App\Listeners\LogUserRegistration::class);
+        // Note: Listeners are auto-discovered in Laravel 11+ or via EventServiceProvider in older versions.
+        // If duplicates appear, these lines are likely the cause.
+        // Event::listen(\Illuminate\Auth\Events\Login::class, \App\Listeners\LogSuccessfulLogin::class);
+        // Event::listen(\Illuminate\Auth\Events\Logout::class, \App\Listeners\LogLogout::class);
+        // Event::listen(\Illuminate\Auth\Events\Registered::class, \App\Listeners\LogUserRegistration::class);
     }
 }

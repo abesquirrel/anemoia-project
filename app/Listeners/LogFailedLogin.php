@@ -20,7 +20,7 @@ class LogFailedLogin
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(Failed $event): void
     {
         EventLog::create([
             'event_type' => 'login_attempt',

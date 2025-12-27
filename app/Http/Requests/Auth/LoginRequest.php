@@ -49,19 +49,7 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            // --- LOGGING FAILED CREDENTIALS ---
-            try {
-                EventLog::create([
-                    'event_type' => 'login_failed',
-                    'message' => 'Login attempt failed for email: ' . $email . ' (Incorrect credentials).',
-                    'ip_address' => $ipAddress,
-                    'user_agent' => $this->userAgent(),
-                    'user_id' => null, // User ID is unknown/unauthenticated
-                ]);
-            } catch (\Exception $e) {
-                Log::error('EventLog FAILED logging failed login attempt: ' . $e->getMessage());
-            }
-            // ----------------------------------
+
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -69,23 +57,6 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
-
-        // --- LOGGING SUCCESSFUL LOGIN ---
-        try {
-            // Note: Auth::attempt sets the authenticated user in the request object
-            $user = Auth::user();
-
-            EventLog::create([
-                'event_type' => 'user_logged_in',
-                'message' => 'User ID ' . $user->id . ' logged in successfully.',
-                'ip_address' => $ipAddress,
-                'user_agent' => $this->userAgent(),
-                'user_id' => $user->id,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('EventLog FAILED logging successful login: ' . $e->getMessage());
-        }
-        // --------------------------------
     }
 
     /**
@@ -104,19 +75,7 @@ class LoginRequest extends FormRequest
 
         event(new Lockout($this));
 
-        // --- LOGGING RATE-LIMITED ATTEMPT ---
-        try {
-            EventLog::create([
-                'event_type' => 'login_rate_limited',
-                'message' => 'Login attempt rate-limited for email: ' . $email . ' (Throttle key: ' . $this->throttleKey() . ').',
-                'ip_address' => $ipAddress,
-                'user_agent' => $this->userAgent(),
-                'user_id' => null,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('EventLog FAILED logging rate-limited login: ' . $e->getMessage());
-        }
-        // ------------------------------------
+
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
@@ -133,6 +92,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }
