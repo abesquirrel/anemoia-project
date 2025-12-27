@@ -80,3 +80,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+if (app()->environment('local', 'testing')) {
+    require __DIR__ . '/preview.php';
+}
