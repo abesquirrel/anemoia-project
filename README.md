@@ -94,6 +94,7 @@ php artisan route:cache
 php artisan view:cache
 php artisan storage:link
 ```
+*For a detailed step-by-step guide, including server configuration and diagrams, please refer to [DEPLOYMENT.md](DEPLOYMENT.md).*
 
 ---
 
@@ -136,3 +137,16 @@ $u->password = Hash::make('password');
 $u->is_admin = true;
 $u->save();
 ```
+
+---
+
+## 📈 Scaling Up: TO-DO List
+
+As the platform grows, consider the following improvements for better performance and scalability:
+
+- [ ] **Queueing System:** Offload heavy tasks like image resizing and email dispatching to a queue worker (Redis/Beanstalkd) instead of running them synchronously.
+- [ ] **Cloud Storage:** Switch the filesystem disk from `local` to `s3` (AWS S3, DigitalOcean Spaces) to handle unlimited media storage and offload bandwidth.
+- [ ] **Caching Layer:** Implement Redis or Memcached for session and cache drivers to reduce database load.
+- [ ] **CDN Integration:** Serve static assets (images, CSS, JS) via a Content Delivery Network (Cloudflare, AWS CloudFront) for faster global loading times.
+- [ ] **Image Formats:** Automate conversion of uploaded images to modern formats like WebP or AVIF for reduced file sizes.
+- [ ] **Database Optimization:** Regularly monitor query performance and add indexes to frequently searched columns (e.g., `is_visible`, `featured_at`).
