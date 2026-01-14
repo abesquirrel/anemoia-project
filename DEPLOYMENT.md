@@ -178,29 +178,29 @@ php artisan view:cache
 ```mermaid
 graph TD
     subgraph Frontend
-        Blade[Blade Templates]
-        Alpine[Alpine.js]
-        Tailwind[Tailwind CSS]
-        PublicAssets[Public Assets \(Images, JS, CSS\)]
+        Blade["Blade Templates"]
+        Alpine["Alpine.js"]
+        Tailwind["Tailwind CSS"]
+        PublicAssets["Public Assets (Images, JS, CSS)"]
     end
 
     subgraph Backend
-        Routes[Routes \(web.php\)]
-        Controllers[Controllers]
-        Models[Eloquent Models]
-        Middleware[Middleware \(Auth, Admin\)]
+        Routes["Routes (web.php)"]
+        Controllers["Controllers"]
+        Models["Eloquent Models"]
+        Middleware["Middleware (Auth, Admin)"]
     end
 
     subgraph Database
-        Users[Users Table]
-        Galleries[Galleries Table]
-        Photos[Photos Table]
-        Posts[Posts Table]
-        EventLogs[EventLogs Table]
+        Users["Users Table"]
+        Galleries["Galleries Table"]
+        Photos["Photos Table"]
+        Posts["Posts Table"]
+        EventLogs["Event Logs Table"]
     end
 
     subgraph Storage
-        LocalDisk[Local Storage \(public/photos\)]
+        LocalDisk["Local Storage (public/photos)"]
     end
 
     Blade --> Routes
