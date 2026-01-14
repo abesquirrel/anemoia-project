@@ -181,14 +181,14 @@ graph TD
         Blade[Blade Templates]
         Alpine[Alpine.js]
         Tailwind[Tailwind CSS]
-        PublicAssets[Public Assets (Images, JS, CSS)]
+        PublicAssets[Public Assets \(Images, JS, CSS\)]
     end
 
     subgraph Backend
-        Routes[Routes (web.php)]
+        Routes[Routes \(web.php\)]
         Controllers[Controllers]
         Models[Eloquent Models]
-        Middleware[Middleware (Auth, Admin)]
+        Middleware[Middleware \(Auth, Admin\)]
     end
 
     subgraph Database
@@ -200,7 +200,7 @@ graph TD
     end
 
     subgraph Storage
-        LocalDisk[Local Storage (public/photos)]
+        LocalDisk[Local Storage \(public/photos\)]
     end
 
     Blade --> Routes
