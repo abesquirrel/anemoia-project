@@ -14,13 +14,19 @@
             @php $coverUrl_A = $featured_gallery_a->cover_photo_url; @endphp
             <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
                 <div class="col-lg-6">
-                    <a class="g-lightbox" data-gallery="gallery{{ $featured_gallery_a->id }}" href="{{ $coverUrl_A }}">
+                    <a class="g-lightbox" 
+                       data-gallery="gallery{{ $featured_gallery_a->id }}" 
+                       href="{{ $coverUrl_A }}"
+                       data-description="<div class='exif-data'>{{ $featured_gallery_a->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_a->camera : '' }}{{ $featured_gallery_a->film && $featured_gallery_a->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $featured_gallery_a->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_a->film : '' }}</div>">
                         <img class="img-thumbnail img-fluid photo-container" src="{{ $coverUrl_A }}" alt="{{ $featured_gallery_a->title }}">
                     </a>
 
                     @foreach($featured_gallery_a->photos as $photo)
                         @if($photo->url !== $coverUrl_A)
-                            <a class="g-lightbox d-none" data-gallery="gallery{{ $featured_gallery_a->id }}" href="{{ $photo->url }}"></a>
+                            <a class="g-lightbox d-none" 
+                               data-gallery="gallery{{ $featured_gallery_a->id }}" 
+                               href="{{ $photo->url }}"
+                               data-description="<div class='exif-data'>{{ $featured_gallery_a->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_a->camera : '' }}{{ $featured_gallery_a->film && $featured_gallery_a->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $featured_gallery_a->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_a->film : '' }}</div>"></a>
                         @endif
                     @endforeach
                 </div>
@@ -41,13 +47,19 @@
             @php $coverUrl_B = $featured_gallery_b->cover_photo_url; @endphp
             <div class="row gx-0 justify-content-center">
                 <div class="col-lg-6">
-                    <a class="g-lightbox" data-gallery="gallery{{ $featured_gallery_b->id }}" href="{{ $coverUrl_B }}">
+                    <a class="g-lightbox" 
+                       data-gallery="gallery{{ $featured_gallery_b->id }}" 
+                       href="{{ $coverUrl_B }}"
+                       data-description="<div class='exif-data'>{{ $featured_gallery_b->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_b->camera : '' }}{{ $featured_gallery_b->film && $featured_gallery_b->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $featured_gallery_b->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_b->film : '' }}</div>">
                         <img class="img-thumbnail img-fluid photo-container" src="{{ $coverUrl_B }}" alt="{{ $featured_gallery_b->title }}">
                     </a>
 
                     @foreach($featured_gallery_b->photos as $photo)
                         @if($photo->url !== $coverUrl_B)
-                            <a class="g-lightbox d-none" data-gallery="gallery{{ $featured_gallery_b->id }}" href="{{ $photo->url }}"></a>
+                            <a class="g-lightbox d-none" 
+                               data-gallery="gallery{{ $featured_gallery_b->id }}" 
+                               href="{{ $photo->url }}"
+                               data-description="<div class='exif-data'>{{ $featured_gallery_b->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_b->camera : '' }}{{ $featured_gallery_b->film && $featured_gallery_b->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $featured_gallery_b->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_b->film : '' }}</div>"></a>
                         @endif
                     @endforeach
                 </div>
@@ -72,14 +84,20 @@
                         <div class="card mb-lg-2">
                             @php $coverUrl_Grid = $gallery->cover_photo_url; @endphp
 
-                            <a class="g-lightbox" data-gallery="gallery_{{ $gallery->id }}" href="{{ $coverUrl_Grid }}">
+                            <a class="g-lightbox" 
+                               data-gallery="gallery_{{ $gallery->id }}" 
+                               href="{{ $coverUrl_Grid }}"
+                               data-description="<div class='exif-data'>{{ $gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $gallery->camera : '' }}{{ $gallery->film && $gallery->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $gallery->film ? '<i class=\"fas fa-film\"></i> ' . $gallery->film : '' }}</div>">
                                 <img class="img-fluid img-thumbnail card-img-top photo-container" src="{{ $coverUrl_Grid }}" alt="{{ $gallery->title }}">
                             </a>
 
                             @foreach($gallery->photos as $photo)
                                 @if($photo->url !== $coverUrl_Grid)
                                     {{-- THIS IS THE FIX: 'classs' is now 'class' --}}
-                                    <a class="g-lightbox d-none" data-gallery="gallery_{{ $gallery->id }}" href="{{ $photo->url }}"></a>
+                                    <a class="g-lightbox d-none" 
+                                       data-gallery="gallery_{{ $gallery->id }}" 
+                                       href="{{ $photo->url }}"
+                                       data-description="<div class='exif-data'>{{ $gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $gallery->camera : '' }}{{ $gallery->film && $gallery->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $gallery->film ? '<i class=\"fas fa-film\"></i> ' . $gallery->film : '' }}</div>"></a>
                                 @endif
                             @endforeach
 

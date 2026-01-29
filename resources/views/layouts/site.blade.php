@@ -30,6 +30,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
+    
+    <style>
+        /* Custom GLightbox Description Styling for EXIF Data */
+        .gslide-description {
+            background: rgba(0, 0, 0, 0.85) !important;
+            padding: 1rem 1.5rem !important;
+            font-family: 'Varela Round', sans-serif !important;
+            font-size: 0.95rem !important;
+            letter-spacing: 0.5px !important;
+            color: #e0e0e0 !important;
+            border-top: 2px solid #64a19d !important;
+            text-align: center !important;
+        }
+        
+        .gdesc-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SVWCRBLWG4"></script>
     <script>
@@ -74,7 +93,8 @@
     const lightbox = GLightbox({
         selector: '.g-lightbox',
         loop: true,
-        touchNavigation: true
+        touchNavigation: true,
+        descPosition: 'bottom'
     });
 
     // GLightbox Analytics
