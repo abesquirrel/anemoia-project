@@ -22,11 +22,16 @@ class Gallery extends Model
         'is_visible',
         'featured_at',
         'show_exif',
+        'show_exif_on_first_only',
+        'exif_fields',
     ];
 
     // This tells Laravel to treat 'featured_at' as a date object
     protected $casts = [
         'featured_at' => 'datetime',
+        'show_exif' => 'boolean',
+        'show_exif_on_first_only' => 'boolean',
+        'exif_fields' => 'array',
     ];
 
     /*

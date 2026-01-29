@@ -35,7 +35,7 @@
         /* Custom GLightbox Description Styling for EXIF Data */
         .gslide-description {
             background: rgba(0, 0, 0, 0.9) !important;
-            padding: 1.25rem 2rem !important;
+            padding: 0.5rem 2rem 2.5rem 2rem !important; /* Reduced top, Increased bottom */
             font-family: 'Varela Round', sans-serif !important;
             font-size: 1.1rem !important;
             letter-spacing: 0.8px !important;
@@ -186,7 +186,7 @@
         // Create counter element
         const counter = document.createElement('div');
         counter.className = 'gslide-count';
-        counter.innerHTML = `Photo <span class="separator">•</span> ${currentIndex + 1} of ${allSlides.length}`;
+        counter.innerHTML = `${currentIndex + 1} <span class="separator">•</span> ${allSlides.length}`;
         
         // Add to glightbox container (not individual slide)
         glightbox.appendChild(counter);

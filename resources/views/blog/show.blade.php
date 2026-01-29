@@ -160,11 +160,25 @@
                                     {{ Str::limit($post->gallery->description, 100) }}
                                 </p>
 
+                                @php
+                                    // EXIF Logic for Blog Post Gallery
+                                    $g = $post->gallery;
+                                    $exifHtml_Post = '';
+                                    if ($g->show_exif) {
+                                         $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
+                                         $parts = [];
+                                         if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
+                                         if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
+                                         if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                                         if ($parts) $exifHtml_Post = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
+                                    }
+                                @endphp
+
                                 <a href="{{ $post->gallery->cover_photo_url }}"
                                    class="g-lightbox btn btn-outline-light rounded-0 text-uppercase"
                                    style="letter-spacing: 2px;"
                                    data-gallery="post-gallery-{{ $post->gallery->id }}"
-                                   data-description="{{ $post->gallery->show_exif ? '<div class=\'exif-data\'>' . ($post->gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $post->gallery->camera : '') . ($post->gallery->film && $post->gallery->camera ? ' <span class=\"separator\">•</span> ' : '') . ($post->gallery->film ? '<i class=\"fas fa-film\"></i> ' . $post->gallery->film : '') . '</div>' : '' }}">
+                                   data-description="{{ $exifHtml_Post }}">
                                     Open Gallery
                                 </a>
 
@@ -174,7 +188,7 @@
                                         <a href="{{ $photo->url }}"
                                            class="g-lightbox d-none"
                                            data-gallery="post-gallery-{{ $post->gallery->id }}"
-                                           data-description="{{ $post->gallery->show_exif ? '<div class=\'exif-data\'>' . ($post->gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $post->gallery->camera : '') . ($post->gallery->film && $post->gallery->camera ? ' <span class=\"separator\">•</span> ' : '') . ($post->gallery->film ? '<i class=\"fas fa-film\"></i> ' . $post->gallery->film : '') . '</div>' : '' }}"></a>
+                                           data-description="{{ $g->show_exif_on_first_only ? '' : $exifHtml_Post }}"></a>
                                     @endif
                                 @endforeach
                             </div>

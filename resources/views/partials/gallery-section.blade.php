@@ -11,13 +11,27 @@
             </div>
         </div>
         @if($featured_gallery_a)
-            @php $coverUrl_A = $featured_gallery_a->cover_photo_url; @endphp
+            @php 
+                $coverUrl_A = $featured_gallery_a->cover_photo_url;
+                
+                // EXIF Logic for A
+                $g = $featured_gallery_a;
+                $exifHtml_A = '';
+                if ($g->show_exif) {
+                     $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
+                     $parts = [];
+                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
+                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
+                     if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                     if ($parts) $exifHtml_A = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
+                }
+            @endphp
             <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
                 <div class="col-lg-6">
                     <a class="g-lightbox" 
                        data-gallery="gallery{{ $featured_gallery_a->id }}" 
                        href="{{ $coverUrl_A }}"
-                       data-description="{{ $featured_gallery_a->show_exif ? '<div class=\'exif-data\'>' . ($featured_gallery_a->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_a->camera : '') . ($featured_gallery_a->film && $featured_gallery_a->camera ? ' <span class=\"separator\">•</span> ' : '') . ($featured_gallery_a->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_a->film : '') . '</div>' : '' }}">
+                       data-description="{{ $exifHtml_A }}">
                         <img class="img-thumbnail img-fluid photo-container" src="{{ $coverUrl_A }}" alt="{{ $featured_gallery_a->title }}" loading="lazy">
                     </a>
 
@@ -26,7 +40,7 @@
                             <a class="g-lightbox d-none" 
                                data-gallery="gallery{{ $featured_gallery_a->id }}" 
                                href="{{ $photo->url }}"
-                               data-description="{{ $featured_gallery_a->show_exif ? '<div class=\'exif-data\'>' . ($featured_gallery_a->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_a->camera : '') . ($featured_gallery_a->film && $featured_gallery_a->camera ? ' <span class=\"separator\">•</span> ' : '') . ($featured_gallery_a->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_a->film : '') . '</div>' : '' }}"></a>
+                               data-description="{{ $g->show_exif_on_first_only ? '' : $exifHtml_A }}"></a>
                         @endif
                     @endforeach
                 </div>
@@ -44,13 +58,27 @@
             </div>
         @endif
         @if($featured_gallery_b)
-            @php $coverUrl_B = $featured_gallery_b->cover_photo_url; @endphp
+            @php 
+                $coverUrl_B = $featured_gallery_b->cover_photo_url;
+                
+                // EXIF Logic for B
+                $g = $featured_gallery_b;
+                $exifHtml_B = '';
+                if ($g->show_exif) {
+                     $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
+                     $parts = [];
+                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
+                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
+                     if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                     if ($parts) $exifHtml_B = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
+                }
+            @endphp
             <div class="row gx-0 justify-content-center">
                 <div class="col-lg-6">
                     <a class="g-lightbox" 
                        data-gallery="gallery{{ $featured_gallery_b->id }}" 
                        href="{{ $coverUrl_B }}"
-                       data-description="{{ $featured_gallery_b->show_exif ? '<div class=\'exif-data\'>' . ($featured_gallery_b->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_b->camera : '') . ($featured_gallery_b->film && $featured_gallery_b->camera ? ' <span class=\"separator\">•</span> ' : '') . ($featured_gallery_b->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_b->film : '') . '</div>' : '' }}">
+                       data-description="{{ $exifHtml_B }}">
                         <img class="img-thumbnail img-fluid photo-container" src="{{ $coverUrl_B }}" alt="{{ $featured_gallery_b->title }}" loading="lazy">
                     </a>
 
@@ -59,7 +87,7 @@
                             <a class="g-lightbox d-none" 
                                data-gallery="gallery{{ $featured_gallery_b->id }}" 
                                href="{{ $photo->url }}"
-                               data-description="{{ $featured_gallery_b->show_exif ? '<div class=\'exif-data\'>' . ($featured_gallery_b->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $featured_gallery_b->camera : '') . ($featured_gallery_b->film && $featured_gallery_b->camera ? ' <span class=\"separator\">•</span> ' : '') . ($featured_gallery_b->film ? '<i class=\"fas fa-film\"></i> ' . $featured_gallery_b->film : '') . '</div>' : '' }}"></a>
+                               data-description="{{ $g->show_exif_on_first_only ? '' : $exifHtml_B }}"></a>
                         @endif
                     @endforeach
                 </div>
@@ -82,22 +110,35 @@
                 @forelse ($grid_galleries as $gallery)
                     <div class="col-md-4">
                         <div class="card mb-lg-2">
-                            @php $coverUrl_Grid = $gallery->cover_photo_url; @endphp
+                            @php 
+                                $coverUrl_Grid = $gallery->cover_photo_url;
+                                
+                                // EXIF Logic for Grid
+                                $g = $gallery;
+                                $exifHtml_G = '';
+                                if ($g->show_exif) {
+                                     $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
+                                     $parts = [];
+                                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
+                                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
+                                     if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                                     if ($parts) $exifHtml_G = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
+                                }
+                            @endphp
 
                             <a class="g-lightbox" 
                                data-gallery="gallery_{{ $gallery->id }}" 
                                href="{{ $coverUrl_Grid }}"
-                               data-description="{{ $gallery->show_exif ? '<div class=\'exif-data\'>' . ($gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $gallery->camera : '') . ($gallery->film && $gallery->camera ? ' <span class=\"separator\">•</span> ' : '') . ($gallery->film ? '<i class=\"fas fa-film\"></i> ' . $gallery->film : '') . '</div>' : '' }}">
+                               data-description="{{ $exifHtml_G }}">
                                 <img class="img-fluid img-thumbnail card-img-top photo-container" src="{{ $coverUrl_Grid }}" alt="{{ $gallery->title }}" loading="lazy">
                             </a>
 
                             @foreach($gallery->photos as $photo)
                                 @if($photo->url !== $coverUrl_Grid)
-                                    {{-- THIS IS THE FIX: 'classs' is now 'class' --}}
                                     <a class="g-lightbox d-none" 
                                        data-gallery="gallery_{{ $gallery->id }}" 
                                        href="{{ $photo->url }}"
-                                       data-description="{{ $gallery->show_exif ? '<div class=\'exif-data\'>' . ($gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $gallery->camera : '') . ($gallery->film && $gallery->camera ? ' <span class=\"separator\">•</span> ' : '') . ($gallery->film ? '<i class=\"fas fa-film\"></i> ' . $gallery->film : '') . '</div>' : '' }}"></a>
+                                       data-description="{{ $g->show_exif_on_first_only ? '' : $exifHtml_G }}"></a>
                                 @endif
                             @endforeach
 

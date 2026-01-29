@@ -1,176 +1,182 @@
 <?php
 
-    namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin;
 
-    use App\Http\Controllers\Controller;
-    use App\Models\Gallery;
-    use App\Models\EventLog;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Str;
-    use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Models\Gallery;
+use App\Models\EventLog;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
-    class GalleryController extends Controller
+class GalleryController extends Controller
+{
+    /**
+     * Display a listing of the galleries.
+     */
+    public function index()
     {
-        /**
-         * Display a listing of the galleries.
-         */
-        public function index()
-        {
-            $galleries = Gallery::withCount('photos')->latest()->get();
-            return view('admin.galleries.index', compact('galleries'));
-        }
-
-        /**
-         * Show the form for creating a new gallery.
-         */
-        public function create()
-        {
-            return view('admin.galleries.create');
-        }
-
-        /**
-         * Store a newly created gallery in storage.
-         */
-        public function store(Request $request)
-        {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'camera' => 'nullable|string|max:255',
-                'lens' => 'nullable|string|max:255',
-                'film' => 'nullable|string|max:255',
-                'is_visible' => 'nullable', // Use 'nullable', not 'boolean'
-            ]);
-
-            $gallery = new Gallery();
-            $gallery->title = $validated['title'];
-            $gallery->slug = Str::slug($validated['title']);
-            $gallery->description = $validated['description'];
-            $gallery->camera = $validated['camera'];
-            $gallery->lens = $validated['lens'];
-            $gallery->film = $validated['film'];
-            $gallery->is_visible = $request->has('is_visible');
-            $gallery->save();
-
-            EventLog::create([
-                'event_type' => 'gallery_change',
-                'message' => 'Created gallery: ' . $validated['title'],
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'user_id' => Auth::id(),
-            ]);
-
-            return redirect()->route('admin.galleries.index')->with('success', 'Gallery created successfully.');
-        }
-
-        /**
-         * Display the specified gallery (we redirect to edit).
-         */
-        public function show(Gallery $gallery)
-        {
-            return redirect()->route('admin.galleries.edit', $gallery);
-        }
-
-        /**
-         * Show the form for editing the specified gallery.
-         */
-        public function edit(Gallery $gallery)
-        {
-            return view('admin.galleries.edit', compact('gallery'));
-        }
-
-        /**
-         * Update the specified gallery in storage.
-         */
-        public function update(Request $request, Gallery $gallery)
-        {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'camera' => 'nullable|string|max:255',
-                'lens' => 'nullable|string|max:255',
-                'film' => 'nullable|string|max:255',
-                'is_visible' => 'nullable',
-            ]);
-
-            $gallery->title = $validated['title'];
-            $gallery->slug = Str::slug($validated['title']);
-            $gallery->description = $validated['description'];
-            $gallery->camera = $validated['camera'];
-            $gallery->lens = $validated['lens']; // Your new field
-            $gallery->film = $validated['film'];
-            $gallery->is_visible = $request->has('is_visible');
-            $gallery->save();
-
-            EventLog::create([
-                'event_type' => 'gallery_change',
-                'message' => 'Updated gallery: ' . $gallery->title,
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'user_id' => Auth::id(),
-            ]);
-
-            return redirect()->route('admin.galleries.index')->with('success', 'Gallery updated successfully.');
-        }
-
-        /**
-         * Remove the specified gallery from storage.
-         *
-         * CORRECTED: Changed (string $id) to (Gallery $gallery)
-         * This fixes the bug where $gallery was undefined.
-         */
-        public function destroy(Gallery $gallery)
-        {
-            // TODO: add file deletion logic here for production
-
-            $gallery->delete();
-
-            EventLog::create([
-                'event_type' => 'gallery_change',
-                'message' => 'Deleted gallery: ' . $gallery->title,
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'user_id' => Auth::id(),
-            ]);
-
-            return redirect()->route('admin.galleries.index')->with('success', 'Gallery deleted successfully.');
-        }
-
-        /**
-         * Mark a gallery as "featured".
-         * Enforces the 2-album limit by replacing the oldest.
-         */
-        public function feature(Gallery $gallery)
-        {
-            // 1. Count how many are already featured
-            $featuredCount = Gallery::whereNotNull('featured_at')->count();
-
-            // 2. If we are at the limit (2), un-feature the oldest one
-            if ($featuredCount >= 2) {
-                $oldestFeatured = Gallery::whereNotNull('featured_at')
-                    ->orderBy('featured_at', 'asc')
-                    ->first();
-                if ($oldestFeatured) {
-                    $oldestFeatured->featured_at = null;
-                    $oldestFeatured->save();
-                }
-            }
-
-            // 3. Feature the new one by setting the timestamp to now
-            $gallery->featured_at = now();
-            $gallery->save();
-
-            return back()->with('success', 'Gallery featured.');
-        }
-
-        /**
-         * Remove a gallery from "featured".
-         */
-        public function unfeature(Gallery $gallery)
-        {
-            $gallery->featured_at = null;
-            $gallery->save();
-
-            return back()->with('success', 'Gallery un-featured.');
-        }
+        $galleries = Gallery::withCount('photos')->latest()->get();
+        return view('admin.galleries.index', compact('galleries'));
     }
+
+    /**
+     * Show the form for creating a new gallery.
+     */
+    public function create()
+    {
+        return view('admin.galleries.create');
+    }
+
+    /**
+     * Store a newly created gallery in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'camera' => 'nullable|string|max:255',
+            'lens' => 'nullable|string|max:255',
+            'film' => 'nullable|string|max:255',
+            'is_visible' => 'nullable', // Use 'nullable', not 'boolean'
+        ]);
+
+        $gallery = new Gallery();
+        $gallery->title = $validated['title'];
+        $gallery->slug = Str::slug($validated['title']);
+        $gallery->description = $validated['description'];
+        $gallery->camera = $validated['camera'];
+        $gallery->lens = $validated['lens'];
+        $gallery->film = $validated['film'];
+        $gallery->is_visible = $request->has('is_visible');
+        $gallery->save();
+
+        EventLog::create([
+            'event_type' => 'gallery_change',
+            'message' => 'Created gallery: ' . $validated['title'],
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->route('admin.galleries.index')->with('success', 'Gallery created successfully.');
+    }
+
+    /**
+     * Display the specified gallery (we redirect to edit).
+     */
+    public function show(Gallery $gallery)
+    {
+        return redirect()->route('admin.galleries.edit', $gallery);
+    }
+
+    /**
+     * Show the form for editing the specified gallery.
+     */
+    public function edit(Gallery $gallery)
+    {
+        return view('admin.galleries.edit', compact('gallery'));
+    }
+
+    /**
+     * Update the specified gallery in storage.
+     */
+    public function update(Request $request, Gallery $gallery)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'camera' => 'nullable|string|max:255',
+            'lens' => 'nullable|string|max:255',
+            'film' => 'nullable|string|max:255',
+            'is_visible' => 'nullable',
+            'show_exif' => 'nullable', // Added validation
+            'show_exif_on_first_only' => 'nullable',
+            'exif_fields' => 'nullable|array',
+        ]);
+
+        $gallery->title = $validated['title'];
+        $gallery->slug = Str::slug($validated['title']);
+        $gallery->description = $validated['description'];
+        $gallery->camera = $validated['camera'];
+        $gallery->lens = $validated['lens'];
+        $gallery->film = $validated['film'];
+        $gallery->is_visible = $request->has('is_visible');
+        $gallery->show_exif = $request->has('show_exif'); // Added assignment
+        $gallery->show_exif_on_first_only = $request->has('show_exif_on_first_only');
+        $gallery->exif_fields = $request->input('exif_fields', []); // Default to empty array if not present
+        $gallery->save();
+
+        EventLog::create([
+            'event_type' => 'gallery_change',
+            'message' => 'Updated gallery: ' . $gallery->title,
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->route('admin.galleries.index')->with('success', 'Gallery updated successfully.');
+    }
+
+    /**
+     * Remove the specified gallery from storage.
+     *
+     * CORRECTED: Changed (string $id) to (Gallery $gallery)
+     * This fixes the bug where $gallery was undefined.
+     */
+    public function destroy(Gallery $gallery)
+    {
+        // TODO: add file deletion logic here for production
+
+        $gallery->delete();
+
+        EventLog::create([
+            'event_type' => 'gallery_change',
+            'message' => 'Deleted gallery: ' . $gallery->title,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'user_id' => Auth::id(),
+        ]);
+
+        return redirect()->route('admin.galleries.index')->with('success', 'Gallery deleted successfully.');
+    }
+
+    /**
+     * Mark a gallery as "featured".
+     * Enforces the 2-album limit by replacing the oldest.
+     */
+    public function feature(Gallery $gallery)
+    {
+        // 1. Count how many are already featured
+        $featuredCount = Gallery::whereNotNull('featured_at')->count();
+
+        // 2. If we are at the limit (2), un-feature the oldest one
+        if ($featuredCount >= 2) {
+            $oldestFeatured = Gallery::whereNotNull('featured_at')
+                ->orderBy('featured_at', 'asc')
+                ->first();
+            if ($oldestFeatured) {
+                $oldestFeatured->featured_at = null;
+                $oldestFeatured->save();
+            }
+        }
+
+        // 3. Feature the new one by setting the timestamp to now
+        $gallery->featured_at = now();
+        $gallery->save();
+
+        return back()->with('success', 'Gallery featured.');
+    }
+
+    /**
+     * Remove a gallery from "featured".
+     */
+    public function unfeature(Gallery $gallery)
+    {
+        $gallery->featured_at = null;
+        $gallery->save();
+
+        return back()->with('success', 'Gallery un-featured.');
+    }
+}

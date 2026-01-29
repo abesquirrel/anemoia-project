@@ -78,13 +78,47 @@
 
                                 <div class="form-check mb-4">
                                     <input class="form-check-input" type="checkbox" id="show_exif" name="show_exif" value="1"
-                                        {{ old('show_exif', $gallery->show_exif) ? 'checked' : '' }}>
+                                        {{ old('show_exif', $gallery->show_exif) ? 'checked' : '' }}
+                                        onchange="document.getElementById('exif-settings').style.display = this.checked ? 'block' : 'none'">
                                     <label class="form-check-label font-weight-bold" for="show_exif">
                                         Show EXIF Data in Lightbox
                                     </label>
                                     <small class="form-text text-muted d-block mt-1">
-                                        <i class="fas fa-camera-retro text-primary"></i> Display camera and film information when viewing photos
+                                        <i class="fas fa-camera-retro text-primary"></i> Display technical details when viewing photos
                                     </small>
+                                </div>
+
+                                <div id="exif-settings" class="ml-4 mb-4 pl-3 border-left" style="display: {{ old('show_exif', $gallery->show_exif) ? 'block' : 'none' }}; border-color: #e3e6f0;">
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="show_exif_on_first_only" name="show_exif_on_first_only" value="1"
+                                            {{ old('show_exif_on_first_only', $gallery->show_exif_on_first_only) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="show_exif_on_first_only">
+                                            Only show on first photo
+                                        </label>
+                                        <small class="form-text text-muted">Useful for minimal looks.</small>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="font-weight-bold small text-uppercase text-gray-600">Fields to Display</label>
+                                        <div class="d-flex flex-column">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="exif_fields[]" value="camera" id="field_camera"
+                                                    {{ in_array('camera', old('exif_fields', $gallery->exif_fields ?? ['camera', 'lens', 'film'])) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="field_camera">Camera</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="exif_fields[]" value="lens" id="field_lens"
+                                                    {{ in_array('lens', old('exif_fields', $gallery->exif_fields ?? ['camera', 'lens', 'film'])) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="field_lens">Lens</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="exif_fields[]" value="film" id="field_film"
+                                                    {{ in_array('film', old('exif_fields', $gallery->exif_fields ?? ['camera', 'lens', 'film'])) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="field_film">Film</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="alert alert-info small">
