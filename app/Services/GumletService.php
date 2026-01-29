@@ -18,13 +18,14 @@ class GumletService
      */
     public function getUrl(string $path, array $params = []): string
     {
+        // If Gumlet is not configured, fall back to Laravel's Storage URL
         if (empty($this->sourceUrl)) {
-            return asset('storage/' . ltrim($path, '/'));
+            return \Illuminate\Support\Facades\Storage::url($path);
         }
 
         // Clean the path
         $path = ltrim($path, '/');
-        
+
         // Build query string
         $queryString = '';
         if (!empty($params)) {
