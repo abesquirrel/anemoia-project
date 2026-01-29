@@ -11,7 +11,7 @@ class Photo extends Model
 {
     use HasFactory;
 
-// Allow mass-assignment of these fields
+    // Allow mass-assignment of these fields
     protected $fillable = [
         'gallery_id',
         'filename',
@@ -36,7 +36,7 @@ class Photo extends Model
     protected function url(): Attribute
     {
         return Attribute::make(
-            get: fn () => Storage::url($this->filename),
+            get: fn() => app(\App\Services\GumletService::class)->getUrl($this->filename),
         );
     }
 }

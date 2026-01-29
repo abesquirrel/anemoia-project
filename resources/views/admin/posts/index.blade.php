@@ -64,7 +64,7 @@
                             <td>{{ $post->id }}</td>
                             <td>
                                 @if($post->featured_image)
-                                    <img src="{{ Storage::url($post->featured_image) }}" alt="Thumbnail" class="img-fluid rounded" style="max-height: 50px;">
+                                    <img src="{{ $post->featured_image_url }}" alt="Thumbnail" class="img-fluid rounded" style="max-height: 50px;">
                                 @else
                                     <div class="bg-gray-200 text-gray-400 rounded d-flex align-items-center justify-content-center" style="height: 50px; width: 50px;">
                                         <i class="fas fa-image"></i>
@@ -135,7 +135,7 @@
             <div class="card shadow mb-3">
                  @if($post->featured_image)
                     <div style="height: 150px; overflow: hidden; border-radius: 0.75rem 0.75rem 0 0;">
-                         <img src="{{ Storage::url($post->featured_image) }}" class="w-100" style="object-fit: cover; height: 100%;">
+                         <img src="{{ $post->featured_image_url }}" class="w-100" style="object-fit: cover; height: 100%;">
                     </div>
                 @endif
                 <div class="card-body">

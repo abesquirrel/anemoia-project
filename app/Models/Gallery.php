@@ -59,7 +59,7 @@ class Gallery extends Model
 
                 // 3. Return URL or Fallback
                 if ($cover) {
-                    return Storage::url($cover->filename);
+                    return app(\App\Services\GumletService::class)->getUrl($cover->filename);
                 }
 
                 return asset('assets/img/bg-masthead.webp');

@@ -57,4 +57,16 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'last_edited_by');
     }
+
+    /**
+     * Get the featured image URL optimized by Gumlet.
+     */
+    protected function featuredImageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn() => $this->featured_image
+                ? app(\App\Services\GumletService::class)->getUrl($this->featured_image)
+                : null,
+        );
+    }
 }

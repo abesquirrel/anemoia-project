@@ -148,7 +148,7 @@
                                      @if($post->featured_image)
                                         <div class="mt-3 p-2 border rounded bg-light">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ Storage::url($post->featured_image) }}" class="mr-3 rounded shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                                                <img src="{{ $post->featured_image_url }}" class="mr-3 rounded shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
                                                 <div>
                                                     <small class="text-muted d-block mb-1 font-weight-bold">Current Image</small>
                                                     <div class="form-check">

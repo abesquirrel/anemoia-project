@@ -4,7 +4,7 @@
 @section('title', $post->title . ' | Anem[o]ia Journal')
 @section('description', Str::limit(strip_tags($post->content), 160))
 @section('og:type', 'article')
-@section('og:image', $post->cover_image ? Storage::url($post->cover_image) : asset('assets/img/og-default.jpg'))
+@section('og:image', $post->featured_image_url ?: ($post->coverPhoto ? $post->coverPhoto->url : asset('assets/img/og-default.jpg')))
 
 @section('content')
 
@@ -116,7 +116,7 @@
 
         if ($post->featured_image) {
             // 1. Priority: Custom Uploaded Image
-            $bgImage = Storage::url($post->featured_image);
+            $bgImage = $post->featured_image_url;
         } elseif ($post->coverPhoto) {
             // 2. Priority: Specific Selected Photo from Album
             $bgImage = $post->coverPhoto->url;

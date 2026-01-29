@@ -101,7 +101,7 @@
                     // IMAGE PRIORITY LOGIC
                     $heroImg = asset('assets/img/bg-masthead.webp');
                     if ($heroPost->featured_image) {
-                        $heroImg = Storage::url($heroPost->featured_image);
+                        $heroImg = $heroPost->featured_image_url;
                     } elseif ($heroPost->coverPhoto) {
                         $heroImg = $heroPost->coverPhoto->url;
                     } elseif ($heroPost->gallery) {
@@ -158,7 +158,7 @@
                             // IMAGE PRIORITY LOGIC
                             $gridImg = asset('assets/img/bg-masthead.webp');
                             if ($post->featured_image) {
-                                $gridImg = Storage::url($post->featured_image);
+                                $gridImg = $post->featured_image_url;
                             } elseif ($post->coverPhoto) {
                                 $gridImg = $post->coverPhoto->url;
                             } elseif ($post->gallery) {

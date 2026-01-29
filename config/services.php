@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'gumlet' => [
+        'source_url' => env('GUMLET_SOURCE_URL'),
+        'use_proxy' => env('GUMLET_USE_PROXY', true),
+    ],
+
 ];
