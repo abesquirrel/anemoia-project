@@ -34,19 +34,61 @@
     <style>
         /* Custom GLightbox Description Styling for EXIF Data */
         .gslide-description {
-            background: rgba(0, 0, 0, 0.85) !important;
-            padding: 1rem 1.5rem !important;
+            background: rgba(0, 0, 0, 0.9) !important;
+            padding: 1.25rem 2rem !important;
             font-family: 'Varela Round', sans-serif !important;
-            font-size: 0.95rem !important;
-            letter-spacing: 0.5px !important;
-            color: #e0e0e0 !important;
+            font-size: 1.1rem !important;
+            letter-spacing: 0.8px !important;
+            color: #e8e8e8 !important;
             border-top: 2px solid #64a19d !important;
             text-align: center !important;
         }
         
-        .gdesc-inner {
-            max-width: 600px;
-            margin: 0 auto;
+        .gslide-description .exif-data {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        
+        .gslide-description .exif-data i {
+            color: #64a19d;
+            margin-right: 0.3rem;
+            font-size: 1rem;
+        }
+        
+        .gslide-description .separator {
+            color: #64a19d;
+            margin: 0 0.5rem;
+            font-weight: 300;
+        }
+        
+        /* Custom slide counter styling - subtle bottom placement */
+        .gslide-count {
+            position: absolute !important;
+            bottom: 1rem !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: rgba(0, 0, 0, 0.5) !important;
+            color: rgba(232, 232, 232, 0.6) !important;
+            padding: 0.35rem 1rem !important;
+            border-radius: 1rem !important;
+            font-family: 'Varela Round', sans-serif !important;
+            font-size: 0.8rem !important;
+            letter-spacing: 1px !important;
+            border: 1px solid rgba(100, 161, 157, 0.15) !important;
+            z-index: 9999 !important;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gslide-count:hover {
+            opacity: 1;
+        }
+        
+        .gslide-count .separator {
+            margin: 0 0.4rem;
+            color: rgba(100, 161, 157, 0.5);
         }
     </style>
 
@@ -97,13 +139,16 @@
         descPosition: 'bottom'
     });
 
-    // GLightbox Analytics
+    // GLightbox Analytics & Custom Counter
     if (typeof lightbox !== 'undefined') {
         lightbox.on('open', () => {
             gtag('event', 'lightbox_open', {
                 'event_category': 'gallery',
                 'event_label': 'Lightbox Opened'
             });
+            
+            // Add custom counter on open (with slight delay for DOM to be ready)
+            setTimeout(updateSlideCounter, 100);
         });
 
         lightbox.on('slide_changed', ({ prev, current }) => {
@@ -111,7 +156,40 @@
                 'event_category': 'gallery',
                 'event_label': 'Slide Changed'
             });
+            
+            // Update custom counter
+            setTimeout(updateSlideCounter, 50);
         });
+    }
+    
+    function updateSlideCounter() {
+        // Remove existing counter
+        const existingCounter = document.querySelector('.gslide-count');
+        if (existingCounter) {
+            existingCounter.remove();
+        }
+        
+        // Get the lightbox wrapper
+        const glightbox = document.querySelector('.glightbox-container');
+        if (!glightbox) return;
+        
+        // Get active slide
+        const activeSlide = glightbox.querySelector('.gslide.current');
+        if (!activeSlide) return;
+        
+        // Get all slides
+        const allSlides = glightbox.querySelectorAll('.gslide');
+        const currentIndex = Array.from(allSlides).indexOf(activeSlide);
+        
+        if (currentIndex === -1 || allSlides.length === 0) return;
+        
+        // Create counter element
+        const counter = document.createElement('div');
+        counter.className = 'gslide-count';
+        counter.innerHTML = `Photo <span class="separator">•</span> ${currentIndex + 1} of ${allSlides.length}`;
+        
+        // Add to glightbox container (not individual slide)
+        glightbox.appendChild(counter);
     }
 
     // Auto-update Copyright Year

@@ -164,7 +164,7 @@
                                    class="g-lightbox btn btn-outline-light rounded-0 text-uppercase"
                                    style="letter-spacing: 2px;"
                                    data-gallery="post-gallery-{{ $post->gallery->id }}"
-                                   data-description="<div class='exif-data'>{{ $post->gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $post->gallery->camera : '' }}{{ $post->gallery->film && $post->gallery->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $post->gallery->film ? '<i class=\"fas fa-film\"></i> ' . $post->gallery->film : '' }}</div>">
+                                   data-description="{{ $post->gallery->show_exif ? '<div class=\'exif-data\'>' . ($post->gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $post->gallery->camera : '') . ($post->gallery->film && $post->gallery->camera ? ' <span class=\"separator\">•</span> ' : '') . ($post->gallery->film ? '<i class=\"fas fa-film\"></i> ' . $post->gallery->film : '') . '</div>' : '' }}">
                                     Open Gallery
                                 </a>
 
@@ -174,7 +174,7 @@
                                         <a href="{{ $photo->url }}"
                                            class="g-lightbox d-none"
                                            data-gallery="post-gallery-{{ $post->gallery->id }}"
-                                           data-description="<div class='exif-data'>{{ $post->gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $post->gallery->camera : '' }}{{ $post->gallery->film && $post->gallery->camera ? ' <span class=\"separator\">•</span> ' : '' }}{{ $post->gallery->film ? '<i class=\"fas fa-film\"></i> ' . $post->gallery->film : '' }}</div>"></a>
+                                           data-description="{{ $post->gallery->show_exif ? '<div class=\'exif-data\'>' . ($post->gallery->camera ? '<i class=\"fas fa-camera-retro\"></i> ' . $post->gallery->camera : '') . ($post->gallery->film && $post->gallery->camera ? ' <span class=\"separator\">•</span> ' : '') . ($post->gallery->film ? '<i class=\"fas fa-film\"></i> ' . $post->gallery->film : '') . '</div>' : '' }}"></a>
                                     @endif
                                 @endforeach
                             </div>

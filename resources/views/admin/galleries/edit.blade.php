@@ -76,6 +76,17 @@
                                     </label>
                                 </div>
 
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="show_exif" name="show_exif" value="1"
+                                        {{ old('show_exif', $gallery->show_exif) ? 'checked' : '' }}>
+                                    <label class="form-check-label font-weight-bold" for="show_exif">
+                                        Show EXIF Data in Lightbox
+                                    </label>
+                                    <small class="form-text text-muted d-block mt-1">
+                                        <i class="fas fa-camera-retro text-primary"></i> Display camera and film information when viewing photos
+                                    </small>
+                                </div>
+
                                 <div class="alert alert-info small">
                                     <i class="fas fa-info-circle mr-1"></i>
                                     Last updated: {{ $gallery->updated_at->diffForHumans() }}

@@ -21,6 +21,7 @@ class Gallery extends Model
         'film',
         'is_visible',
         'featured_at',
+        'show_exif',
     ];
 
     // This tells Laravel to treat 'featured_at' as a date object
