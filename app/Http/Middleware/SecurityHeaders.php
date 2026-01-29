@@ -32,13 +32,15 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
         // 4. Content Security Policy (CSP) - strict rules for scripts/styles
-        // Allow: Self, Google Fonts, FontAwesome, GLightbox (JSDelivr), Google Analytics
+        // Allow: Self, Google Fonts, FontAwesome, GLightbox (JSDelivr), Google Analytics, Gumlet CDN
+        $gumletDomain = config('services.gumlet.source_url') ? parse_url(config('services.gumlet.source_url'), PHP_URL_HOST) : '';
+
         $csp = "default-src 'self'; " .
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://use.fontawesome.com https://cdn.jsdelivr.net https://www.googletagmanager.com; " .
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://use.fontawesome.com https://cdn.jsdelivr.net https://www.googletagmanager.com https://static.cloudflareinsights.com; " .
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://use.fontawesome.com https://cdn.jsdelivr.net; " .
             "font-src 'self' https://fonts.gstatic.com https://use.fontawesome.com; " .
-            "img-src 'self' data: https://ui-avatars.com; " .
-            "connect-src 'self' https://www.google-analytics.com;";
+            "img-src 'self' data: https://ui-avatars.com" . ($gumletDomain ? " https://{$gumletDomain}" : "") . "; " .
+            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://static.cloudflareinsights.com;";
 
         // Note: 'unsafe-inline' and 'unsafe-eval' are often needed for Alpine/Livewire or inline scripts.
         // We included them to prevent breakage, but can be tightened later with nonces.
