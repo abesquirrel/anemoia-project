@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification</title>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <style>
+        /* CSS from layouts/site.blade.php */
+        body {
+            background-color: #333;
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: flex-end; /* Simulate bottom position */
+            justify-content: center;
+        }
+
+        /* Custom GLightbox Description Styling for EXIF Data */
+        .gslide-description {
+            background: rgba(0, 0, 0, 0.75) !important; /* Increased transparency */
+            padding: 0.5rem 2rem 2.5rem 2rem !important; /* Reduced top, Increased bottom */
+            font-family: 'Varela Round', sans-serif !important;
+            font-size: 1.1rem !important;
+            letter-spacing: 0.8px !important;
+            color: #e8e8e8 !important;
+            border-top: 2px solid #64a19d !important;
+            text-align: center !important;
+            backdrop-filter: blur(3px); /* Subtle blur for better legibility */
+            width: 100%; /* Full width simulation */
+            box-sizing: border-box;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .gslide-description {
+                padding: 0.5rem 1rem 2rem 1rem !important;
+                font-size: 0.9rem !important;
+            }
+        }
+
+        .gslide-description .exif-data {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .gslide-description .exif-data i {
+            color: #64a19d;
+            margin-right: 0.25rem;
+            font-size: 0.9em;
+        }
+
+        .gslide-description .separator {
+            color: #64a19d;
+            margin: 0 0.5rem;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mock GLightbox container -->
+    <div class="gslide-description">
+        <div class="exif-data">
+            <i class="fas fa-camera-retro"></i> Canon EOS 5D Mark IV
+            <span class="separator">•</span>
+            <i class="fas fa-bullseye"></i> Canon EF 50mm f/1.2L USM
+            <span class="separator">•</span>
+            <i class="fas fa-film"></i> Kodak Portra 400
+        </div>
+    </div>
+
+</body>
+</html>

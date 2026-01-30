@@ -20,9 +20,9 @@
                 if ($g->show_exif) {
                      $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
                      $parts = [];
-                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
-                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
-                     if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<span class="text-nowrap"><i class="fas fa-camera-retro"></i> ' . $g->camera . '</span>';
+                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<span class="text-nowrap"><i class="fas fa-bullseye"></i> ' . $g->lens . '</span>';
+                     if (in_array('film', $fields) && $g->film) $parts[] = '<span class="text-nowrap"><i class="fas fa-film"></i> ' . $g->film . '</span>';
                      if ($parts) $exifHtml_A = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
                 }
             @endphp
@@ -67,9 +67,9 @@
                 if ($g->show_exif) {
                      $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
                      $parts = [];
-                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
-                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
-                     if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<span class="text-nowrap"><i class="fas fa-camera-retro"></i> ' . $g->camera . '</span>';
+                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<span class="text-nowrap"><i class="fas fa-bullseye"></i> ' . $g->lens . '</span>';
+                     if (in_array('film', $fields) && $g->film) $parts[] = '<span class="text-nowrap"><i class="fas fa-film"></i> ' . $g->film . '</span>';
                      if ($parts) $exifHtml_B = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
                 }
             @endphp
@@ -119,9 +119,9 @@
                                 if ($g->show_exif) {
                                      $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
                                      $parts = [];
-                                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
-                                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
-                                     if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                                     if (in_array('camera', $fields) && $g->camera) $parts[] = '<span class="text-nowrap"><i class="fas fa-camera-retro"></i> ' . $g->camera . '</span>';
+                                     if (in_array('lens', $fields) && $g->lens) $parts[] = '<span class="text-nowrap"><i class="fas fa-bullseye"></i> ' . $g->lens . '</span>';
+                                     if (in_array('film', $fields) && $g->film) $parts[] = '<span class="text-nowrap"><i class="fas fa-film"></i> ' . $g->film . '</span>';
                                      if ($parts) $exifHtml_G = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
                                 }
                             @endphp
