@@ -34,7 +34,7 @@
     <style>
         /* Custom GLightbox Description Styling for EXIF Data */
         .gslide-description {
-            background: rgba(0, 0, 0, 0.9) !important;
+            background: rgba(0, 0, 0, 0.75) !important; /* Increased transparency */
             padding: 0.5rem 2rem 2.5rem 2rem !important; /* Reduced top, Increased bottom */
             font-family: 'Varela Round', sans-serif !important;
             font-size: 1.1rem !important;
@@ -42,19 +42,30 @@
             color: #e8e8e8 !important;
             border-top: 2px solid #64a19d !important;
             text-align: center !important;
+            backdrop-filter: blur(3px); /* Subtle blur for better legibility */
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .gslide-description {
+                padding: 0.5rem 1rem 2rem 1rem !important;
+                font-size: 0.9rem !important;
+            }
         }
         
         .gslide-description .exif-data {
-            display: inline-flex;
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
             align-items: center;
             justify-content: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
+            line-height: 1.4;
         }
         
         .gslide-description .exif-data i {
             color: #64a19d;
-            margin-right: 0.3rem;
-            font-size: 1rem;
+            margin-right: 0.25rem;
+            font-size: 0.9em;
         }
         
         .gslide-description .separator {
