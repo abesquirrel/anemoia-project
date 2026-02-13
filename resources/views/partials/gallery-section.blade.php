@@ -126,12 +126,14 @@
                                 }
                             @endphp
 
-                            <a class="g-lightbox" 
-                               data-gallery="gallery_{{ $gallery->id }}" 
-                               href="{{ $coverUrl_Grid }}"
-                               data-description="{{ $exifHtml_G }}">
-                                <img class="img-fluid img-thumbnail card-img-top photo-container" src="{{ $coverUrl_Grid }}" alt="{{ $gallery->title }}" loading="lazy">
-                            </a>
+                            <div>
+                                <a class="g-lightbox" 
+                                   data-gallery="gallery_{{ $gallery->id }}" 
+                                   href="{{ $coverUrl_Grid }}"
+                                   data-description="{{ $exifHtml_G }}">
+                                    <img class="img-fluid img-thumbnail card-img-top photo-container" src="{{ $coverUrl_Grid }}" alt="{{ $gallery->title }}" loading="lazy">
+                                </a>
+                            </div>
 
                             @foreach($gallery->photos as $photo)
                                 @if($photo->url !== $coverUrl_Grid)

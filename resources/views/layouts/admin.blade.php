@@ -1,36 +1,45 @@
-    <!DOCTYPE html>
-    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-        <title>Anemoia - Admin Panel</title>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <link href="{{ asset('admin_assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-        <link href="{{ asset('admin_assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('admin_assets/css/custom.css') }}" rel="stylesheet">
+    <title>Anemoia - Admin Panel</title>
 
-        <style>
-            /* Specific fix for scrollbar hiding (browser specific) can stay here or move to custom.css if preferred.
+    <link href="{{ asset('admin_assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="{{ asset('admin_assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin_assets/css/custom.css') }}" rel="stylesheet">
+
+    <style>
+        /* Specific fix for scrollbar hiding (browser specific) can stay here or move to custom.css if preferred.
                Keeping here for clarity as it's a specific utility. */
-            ::-webkit-scrollbar { display: none; }
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            
-            /* Clean up: Removed inline overrides for colors/buttons as they are now in custom.css */
-        </style>
-    </head>
-    <body id="page-top">
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        /* Clean up: Removed inline overrides for colors/buttons as they are now in custom.css */
+    </style>
+</head>
+
+<body id="page-top">
     <div id="wrapper">
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}" target="_blank">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}"
+                target="_blank">
                 <div class="sidebar-brand-text mx-3">Anem[o]ia</div>
             </a>
             <hr class="sidebar-divider my-0">
-            <li class="nav-item {{ request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            <li
+                class="nav-item {{ request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 @if(auth()->user()->is_admin)
                     <a class="nav-link" href="{{ route('admin.dashboard') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -43,7 +52,8 @@
             </li>
             <hr class="sidebar-divider">
             <div class="sidebar-heading">Content</div>
-            <li class="nav-item {{ request()->routeIs('admin.galleries.*') || request()->routeIs('admin.photos.*') ? 'active' : '' }}">
+            <li
+                class="nav-item {{ request()->routeIs('admin.galleries.*') || request()->routeIs('admin.photos.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('admin.galleries.index') }}">
                     <i class="fas fa-fw fa-images"></i>
                     <span>Galleries</span></a>
@@ -61,6 +71,12 @@
                     <span>Activity Log</span></a>
             </li>
 
+            <li class="nav-item {{ request()->routeIs('admin.social-platforms.*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.social-platforms.index') }}">
+                    <i class="fas fa-fw fa-share-alt"></i>
+                    <span>Social Settings</span></a>
+            </li>
+
             <!-- Nav Item - User Management -->
             <li class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('admin.users.index') }}">
@@ -69,7 +85,7 @@
             </li>
 
             <hr class="sidebar-divider">
-            
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('home') }}" target="_blank">
                     <i class="fas fa-fw fa-external-link-alt"></i>
@@ -87,7 +103,7 @@
 
             <!-- Theme Toggler (New) -->
             <div class="theme-switch-wrapper text-center">
-                 <div class="custom-control custom-switch">
+                <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id="themeSwitch">
                     <label class="custom-control-label" for="themeSwitch">
                         <span id="themeLabel">Light Mode</span>
@@ -95,7 +111,7 @@
                 </div>
             </div>
 
-             <!-- Sidebar Toggler (Sidebar) -->
+            <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline mt-3">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
@@ -105,7 +121,7 @@
             <!-- ... Content ... -->
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
-                    
+
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -115,14 +131,15 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                 <img class="img-profile rounded-circle"
-                                     src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random">
+                                    src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="userDropdown">
+                                aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
@@ -155,7 +172,7 @@
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -168,7 +185,7 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-primary" href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>
@@ -214,10 +231,11 @@
             } else {
                 localStorage.setItem('theme', 'light');
                 applyTheme('light');
-            }    
+            }
         }
 
         toggleSwitch.addEventListener('change', switchTheme, false);
     </script>
-    </body>
-    </html>
+</body>
+
+</html>

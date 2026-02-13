@@ -17,15 +17,19 @@
             background-size: cover;
             background-position: center;
             display: flex;
-            align-items: center; /* Center vertically */
+            align-items: center;
+            /* Center vertically */
             justify-content: center;
         }
 
         /* Gradient overlay to ensure text pop */
         .article-overlay {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3), #000000);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), #000000);
         }
 
         .header-content {
@@ -41,7 +45,8 @@
             /* Using theme font (Varela Round usually) */
             font-family: inherit;
             font-weight: 800;
-            font-size: clamp(2.5rem, 5vw, 4.5rem); /* Responsive sizing */
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            /* Responsive sizing */
             line-height: 1.1;
             color: white;
             margin-bottom: 1.5rem;
@@ -56,7 +61,7 @@
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 2rem;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             display: inline-block;
             padding: 8px 24px;
             border-radius: 50px;
@@ -71,18 +76,24 @@
         .article-body {
             /* Inherit site font (Nunito) but style for reading */
             font-family: inherit;
-            font-size: 1.2rem;      /* Slightly larger than standard */
-            line-height: 1.8;       /* Open line height for breathing room */
-            color: #d1d5db;         /* Light Gray (easier on eyes than pure white) */
+            font-size: 1.2rem;
+            /* Slightly larger than standard */
+            line-height: 1.8;
+            /* Open line height for breathing room */
+            color: #d1d5db;
+            /* Light Gray (easier on eyes than pure white) */
 
             /* THE GOLDEN RULE OF READABILITY: Max width 680-750px */
             max-width: 700px;
-            margin: 0 auto;         /* Center the column */
-            font-weight: 300;       /* Light weight looks elegant in dark mode */
+            margin: 0 auto;
+            /* Center the column */
+            font-weight: 300;
+            /* Light weight looks elegant in dark mode */
         }
 
         .article-body p {
-            margin-bottom: 2rem; /* generous spacing between paragraphs */
+            margin-bottom: 2rem;
+            /* generous spacing between paragraphs */
         }
 
         /* Styled First Letter (Drop Cap - Sans Serif Style) */
@@ -103,6 +114,7 @@
             margin: 5rem auto 0;
             transition: transform 0.3s;
         }
+
         .gallery-link-card:hover {
             border-color: #444;
             transform: translateY(-5px);
@@ -144,17 +156,24 @@
 
             <div class="article-body">
                 {!! nl2br(e($post->body)) !!}
+
+                <div class="mt-5 text-center">
+                    <x-social-share :url="route('blog.show', $post->slug)" :title="$post->title"
+                        :description="Str::limit(strip_tags($post->body), 100)" :image="$post->featured_image_url ?: ($post->coverPhoto ? $post->coverPhoto->url : null)" class="d-flex justify-content-center" />
+                </div>
             </div>
 
             @if($post->gallery)
                 <div class="card gallery-link-card">
                     <div class="row g-0">
                         <div class="col-md-6">
-                            <img src="{{ $post->gallery->cover_photo_url }}" class="img-fluid h-100 w-100" style="object-fit: cover; min-height: 300px;" alt="{{ $post->gallery->title }}">
+                            <img src="{{ $post->gallery->cover_photo_url }}" class="img-fluid h-100 w-100"
+                                style="object-fit: cover; min-height: 300px;" alt="{{ $post->gallery->title }}">
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <div class="card-body p-4 p-lg-5">
-                                <h6 class="text-uppercase text-secondary mb-2" style="letter-spacing: 2px; font-size: 0.7rem;">Visual Story</h6>
+                                <h6 class="text-uppercase text-secondary mb-2" style="letter-spacing: 2px; font-size: 0.7rem;">
+                                    Visual Story</h6>
                                 <h3 class="text-white mb-3" style="text-transform: uppercase;">{{ $post->gallery->title }}</h3>
                                 <p class="text-white-50 mb-4 small">
                                     {{ Str::limit($post->gallery->description, 100) }}
@@ -165,30 +184,32 @@
                                     $g = $post->gallery;
                                     $exifHtml_Post = '';
                                     if ($g->show_exif) {
-                                         $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
-                                         $parts = [];
-                                         if (in_array('camera', $fields) && $g->camera) $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
-                                         if (in_array('lens', $fields) && $g->lens) $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
-                                         if (in_array('film', $fields) && $g->film) $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
-                                         if ($parts) $exifHtml_Post = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
+                                        $fields = $g->exif_fields ?? ['camera', 'lens', 'film'];
+                                        $parts = [];
+                                        if (in_array('camera', $fields) && $g->camera)
+                                            $parts[] = '<i class="fas fa-camera-retro"></i> ' . $g->camera;
+                                        if (in_array('lens', $fields) && $g->lens)
+                                            $parts[] = '<i class="fas fa-bullseye"></i> ' . $g->lens;
+                                        if (in_array('film', $fields) && $g->film)
+                                            $parts[] = '<i class="fas fa-film"></i> ' . $g->film;
+                                        if ($parts)
+                                            $exifHtml_Post = '<div class="exif-data">' . implode(' <span class="separator">•</span> ', $parts) . '</div>';
                                     }
                                 @endphp
 
                                 <a href="{{ $post->gallery->cover_photo_url }}"
-                                   class="g-lightbox btn btn-outline-light rounded-0 text-uppercase"
-                                   style="letter-spacing: 2px;"
-                                   data-gallery="post-gallery-{{ $post->gallery->id }}"
-                                   data-description="{{ $exifHtml_Post }}">
+                                    class="g-lightbox btn btn-outline-light rounded-0 text-uppercase"
+                                    style="letter-spacing: 2px;" data-gallery="post-gallery-{{ $post->gallery->id }}"
+                                    data-description="{{ $exifHtml_Post }}">
                                     Open Gallery
                                 </a>
 
                                 {{-- Hidden links --}}
                                 @foreach($post->gallery->photos as $photo)
                                     @if($photo->url !== $post->gallery->cover_photo_url && $photo->is_visible)
-                                        <a href="{{ $photo->url }}"
-                                           class="g-lightbox d-none"
-                                           data-gallery="post-gallery-{{ $post->gallery->id }}"
-                                           data-description="{{ $g->show_exif_on_first_only ? '' : $exifHtml_Post }}"></a>
+                                        <a href="{{ $photo->url }}" class="g-lightbox d-none"
+                                            data-gallery="post-gallery-{{ $post->gallery->id }}"
+                                            data-description="{{ $g->show_exif_on_first_only ? '' : $exifHtml_Post }}"></a>
                                     @endif
                                 @endforeach
                             </div>
@@ -198,7 +219,8 @@
             @endif
 
             <div class="text-center mt-5 pt-5">
-                <a href="{{ route('blog.index') }}" class="text-white-50 text-decoration-none text-uppercase small" style="letter-spacing: 3px; transition: color 0.3s;">
+                <a href="{{ route('blog.index') }}" class="text-white-50 text-decoration-none text-uppercase small"
+                    style="letter-spacing: 3px; transition: color 0.3s;">
                     &larr; Back to Journal
                 </a>
             </div>
@@ -206,22 +228,22 @@
         </div>
     </section>
 
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof gtag === 'function') {
-                gtag('event', 'view_item', {
-                    "items": [
-                        {
-                            "item_id": "{{ $post->id }}",
-                            "item_name": "{{ $post->title }}",
-                            "item_category": "Blog Post",
-                            "author": "{{ $post->user ? $post->user->name : 'Anemoia' }}"
-                        }
-                    ]
-                });
-            }
-        });
-    </script>
-@endpush
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (typeof gtag === 'function') {
+                    gtag('event', 'view_item', {
+                        "items": [
+                            {
+                                "item_id": "{{ $post->id }}",
+                                "item_name": "{{ $post->title }}",
+                                "item_category": "Blog Post",
+                                "author": "{{ $post->user ? $post->user->name : 'Anemoia' }}"
+                            }
+                        ]
+                    });
+                }
+            });
+        </script>
+    @endpush
 @endsection
