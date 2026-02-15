@@ -18,8 +18,16 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Paul',
+            'email' => 'paul@example.com',
+            'is_admin' => true,
+        ]);
+
+        $this->call([
+            SocialPlatformSeeder::class,
+            SettingSeeder::class,
+            GallerySeeder::class,
+            // Add other seeders here
         ]);
     }
 }
