@@ -13,7 +13,7 @@
             height: auto;
             min-height: 35rem;
             padding: 15rem 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 75%, #000000 100%), url('{{ asset('assets/img/bg-masthead.webp') }}');
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 75%, #000000 100%), url('{{ asset('assets/img/bg-masthead.webp') }}');
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: scroll;
@@ -22,17 +22,22 @@
 
         /* --- HERO CARD (The "Floating" Look) --- */
         .hero-card {
-            background: #0a0a0a; /* Very dark grey background */
-            border: 1px solid rgba(255, 255, 255, 0.15); /* The Border you requested */
+            background: #0a0a0a;
+            /* Very dark grey background */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            /* The Border you requested */
             border-radius: 12px;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
         .hero-card:hover {
-            transform: translateY(-10px); /* Float up */
-            border-color: #64a19d; /* Accent color on border */
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5); /* Glow effect */
+            transform: translateY(-10px);
+            /* Float up */
+            border-color: #64a19d;
+            /* Accent color on border */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            /* Glow effect */
         }
 
         /* --- GRID CARDS --- */
@@ -43,6 +48,7 @@
             height: 100%;
             display: block;
         }
+
         .blog-card:hover {
             transform: translateY(-10px);
         }
@@ -51,7 +57,8 @@
         .blog-img-wrapper {
             position: relative;
             overflow: hidden;
-            border-radius: 8px; /* Rounded images */
+            border-radius: 8px;
+            /* Rounded images */
             width: 100%;
         }
 
@@ -64,7 +71,7 @@
         /* Grid Images - Rounded */
         .grid-img-wrapper {
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
             aspect-ratio: 3/2;
         }
 
@@ -77,7 +84,8 @@
 
         .hero-card:hover .hero-img-wrapper img,
         .blog-card:hover .grid-img-wrapper img {
-            transform: scale(1.05); /* Zoom on hover */
+            transform: scale(1.05);
+            /* Zoom on hover */
         }
     </style>
 
@@ -86,7 +94,8 @@
             <div class="d-flex justify-content-center">
                 <div class="text-center">
                     <h1 class="mx-auto my-0 text-uppercase">The Unreliable Narrator</h1>
-                    <h2 class="text-white-50 mx-auto mt-2 mb-5">What I know, what I thought, what I’m still figuring out.</h2>
+                    <h2 class="text-white-50 mx-auto mt-2 mb-5">What I know, what I thought, what I’m still figuring out.
+                    </h2>
                 </div>
             </div>
         </div>
@@ -120,7 +129,7 @@
                             <div class="row g-0 align-items-stretch">
 
                                 {{-- Image Side --}}
-                                <div class="col-lg-7">
+                                <div class="col-xl-7">
                                     <div class="blog-img-wrapper hero-img-wrapper">
                                         <a href="{{ route('blog.show', $heroPost->slug) }}">
                                             <img src="{{ $heroImg }}" alt="{{ $heroPost->title }}">
@@ -129,16 +138,19 @@
                                 </div>
 
                                 {{-- Text Side --}}
-                                <div class="col-lg-5 d-flex align-items-center">
-                                    <div class="p-4 p-lg-5 text-center text-lg-start">
-                                        <div class="text-uppercase text-primary fw-bold mb-2 small" style="letter-spacing: 2px;">
+                                <div class="col-xl-5 d-flex align-items-center justify-content-center">
+                                    <div class="p-4 p-lg-5 text-center w-100">
+                                        <div class="text-uppercase text-primary fw-bold mb-2 small"
+                                            style="letter-spacing: 2px;">
                                             Latest &bull; {{ $heroPost->published_at->format('M d, Y') }}
                                         </div>
                                         <h3 class="mb-3">
-                                            <a href="{{ route('blog.show', $heroPost->slug) }}" class="text-white text-decoration-none display-6 fw-bold">{{ $heroPost->title }}</a>
+                                            <a href="{{ route('blog.show', $heroPost->slug) }}"
+                                                class="text-white text-decoration-none display-6 fw-bold">{{ $heroPost->title }}</a>
                                         </h3>
                                         <p class="text-white-50 mb-4">{{ Str::limit(strip_tags($heroPost->body), 160) }}</p>
-                                        <a class="btn btn-outline-light rounded-pill px-4" href="{{ route('blog.show', $heroPost->slug) }}">Read Story</a>
+                                        <a class="btn btn-outline-light rounded-pill px-4"
+                                            href="{{ route('blog.show', $heroPost->slug) }}">Read Story</a>
                                     </div>
                                 </div>
 
@@ -181,7 +193,8 @@
                                     {{ $post->published_at->format('F d, Y') }}
                                 </div>
                                 <h4 class="fw-bold mb-2">
-                                    <a href="{{ route('blog.show', $post->slug) }}" class="text-white text-decoration-none">{{ $post->title }}</a>
+                                    <a href="{{ route('blog.show', $post->slug) }}"
+                                        class="text-white text-decoration-none">{{ $post->title }}</a>
                                 </h4>
                                 <p class="text-white-50 small">
                                     {{ Str::limit(strip_tags($post->body), 120) }}
@@ -193,7 +206,8 @@
             @endif
 
             @if(!$heroPost)
-                <div class="text-center text-white-50 py-5" style="min-height: 50vh; display: flex; flex-direction: column; justify-content: center;">
+                <div class="text-center text-white-50 py-5"
+                    style="min-height: 50vh; display: flex; flex-direction: column; justify-content: center;">
                     <h2 class="text-white fw-bold">No posts found.</h2>
                     <p>Check back later!</p>
                 </div>
@@ -202,32 +216,32 @@
         </div>
     </section>
 
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof gtag === 'function') {
-                gtag('event', 'view_item_list', {
-                    "item_list_id": "journal",
-                    "item_list_name": "Journal Entries",
-                    "items": [
-                        @if($heroPost)
-                        {
-                            "item_id": "{{ $heroPost->id }}",
-                            "item_name": "{{ $heroPost->title }}",
-                            "index": 1
-                        },
-                        @endif
-                        @foreach ($gridPosts as $index => $post)
-                        {
-                            "item_id": "{{ $post->id }}",
-                            "item_name": "{{ $post->title }}",
-                            "index": {{ $index + 2 }}
-                        },
-                        @endforeach
-                    ]
-                });
-            }
-        });
-    </script>
-@endpush
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (typeof gtag === 'function') {
+                    gtag('event', 'view_item_list', {
+                        "item_list_id": "journal",
+                        "item_list_name": "Journal Entries",
+                        "items": [
+                            @if($heroPost)
+                                                {
+                                    "item_id": "{{ $heroPost->id }}",
+                                    "item_name": "{{ $heroPost->title }}",
+                                    "index": 1
+                                },
+                            @endif
+                            @foreach ($gridPosts as $index => $post)
+                                        {
+                                "item_id": "{{ $post->id }}",
+                                "item_name": "{{ $post->title }}",
+                                "index": {{ $index + 2 }}
+                                        },
+                            @endforeach
+                                    ]
+                    });
+                }
+            });
+        </script>
+    @endpush
 @endsection

@@ -68,6 +68,11 @@ Route::middleware('auth')->group(function () {
 
         // 8. User Management
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class); // Manually registered for clarity
+
+        // 9. Social Platforms
+        Route::patch('social-platforms/reorder', [\App\Http\Controllers\Admin\SocialPlatformController::class, 'updateOrder'])->name('social-platforms.reorder');
+        Route::patch('social-platforms/toggle-global', [\App\Http\Controllers\Admin\SocialPlatformController::class, 'updateGlobal'])->name('social-platforms.toggle-global');
+        Route::resource('social-platforms', \App\Http\Controllers\Admin\SocialPlatformController::class)->except(['show']);
     });
 
     // ### SHARED ADMIN/EDITOR ROUTES ###
